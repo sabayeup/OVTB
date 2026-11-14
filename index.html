@@ -280,6 +280,15 @@ body.mobile #qfab{left:max(14px,calc(50vw - 220px + 14px))}
 body.mobile #quick{width:min(86vw,320px)}
 body[data-theme="persona"] h2,body[data-theme="persona"] .profile-name,body[data-theme="persona"] .big-number{text-shadow:-2px 0 #000,2px 0 #000,0 -2px #000,0 2px #000,-2px -2px #000,2px -2px #000,-2px 2px #000,2px 2px #000,4px 4px 0 var(--accent)}
 .info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-left:10px;padding:0;border-radius:50%;border:1.5px solid currentColor;background:transparent;color:inherit;font:italic 700 13px/1 Georgia,serif;text-transform:none;vertical-align:middle;opacity:.8;cursor:pointer;text-shadow:none;transform:none;letter-spacing:0}.info:hover{opacity:1}h2 .info{width:18px;height:18px;font-size:11px}.eyebrow .info{width:16px;height:16px;font-size:10px;margin-left:6px}
+
+/* Solo Leveling : glitch « vieille télé » au changement de rubrique */
+body[data-theme="solo"] .page.active::before{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;background-image:linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a),linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a);background-repeat:no-repeat;background-size:30px 30px,20px 20px,46px 14px,12px 12px,26px 26px,16px 16px;filter:blur(1.6px) saturate(2.6);mix-blend-mode:screen;animation:sgSq .55s steps(1,end) both}
+body[data-theme="solo"] .page.active::after{content:"";position:fixed;inset:0;z-index:41;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.38) 0 1px,transparent 1px 3px);filter:blur(.4px);animation:sgScan .55s steps(1,end) both}
+body[data-theme="solo"] .page.active>*{animation:sgPg .5s steps(1,end)}
+@keyframes sgSq{0%{background-position:12% 18%,78% 40%,30% 72%,64% 10%,90% 85%,50% 50%;opacity:1}18%{background-position:70% 30%,15% 60%,55% 20%,25% 88%,40% 45%,82% 76%}36%{background-position:35% 80%,88% 12%,8% 50%,72% 66%,58% 28%,20% 34%}54%{background-position:92% 55%,42% 90%,76% 34%,18% 24%,6% 70%,64% 92%;opacity:.8}72%{background-position:22% 42%,64% 8%,48% 62%,84% 78%,34% 16%,96% 30%;opacity:.5}90%{opacity:.25}100%{opacity:0}}
+@keyframes sgScan{0%{opacity:1}30%{opacity:.4}50%{opacity:.9}75%{opacity:.35}100%{opacity:0}}
+@keyframes sgPg{0%{transform:translateX(-7px) skewX(2deg);filter:saturate(3.2) hue-rotate(40deg) blur(1.6px)}14%{transform:translateX(6px);filter:saturate(2.6) hue-rotate(-30deg) blur(.9px)}28%{transform:translateX(-4px) skewX(-1.5deg);filter:saturate(3.2) blur(2px)}42%{transform:translateX(3px);filter:saturate(1.9) hue-rotate(20deg)}58%{transform:translateX(-1px);filter:saturate(1.5) blur(.6px)}74%{transform:none;filter:saturate(1.2)}100%{transform:none;filter:none}}
+@media (prefers-reduced-motion:reduce){body[data-theme="solo"] .page.active::before,body[data-theme="solo"] .page.active::after{display:none}body[data-theme="solo"] .page.active>*{animation:none}}
 </style>
 </head>
 <body data-theme="persona">
@@ -793,7 +802,7 @@ function catName(i,v){if(i===0)return;const c=S.cats[i];v=v.trim();if(S.bi.on&&S
 function descIn(v){if(S.bi.on&&S.tl)S.profile.trd=v;else S.profile.desc=v;save()}
 rollover();renderHome();paintMobile();paintQuick();startTr();
 setInterval(()=>{const k=S.week;rollover();S.week!==k?renderAll():tick();chkRem();if(S.todoOpen)paintQuick();if(document.querySelector('.page.active').id==='missions')renderMissions()},30000);chkRem();paintSw();$('qdays').innerHTML=dayPick('qdp');
-if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+if('serviceWorker' in navigator && location.protocol!=='file:'){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)location.reload()});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
 </body>
 </html>
