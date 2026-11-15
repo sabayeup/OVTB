@@ -224,7 +224,7 @@ body[data-theme="bloodborne"]::before{background-image:linear-gradient(rgba(0,0,
 header>.brand{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.head-actions{flex:none}
 .iconbtn svg{display:block;margin:auto}
 body[data-theme] .iconbtn.on{border-color:var(--accent);color:var(--accent)}
-.i-desk{display:none}body.mobile .i-phone{display:none}body.mobile .i-desk{display:block}
+.i-phone{display:none}body.mobile .i-phone{display:block}body.mobile .i-desk{display:none}
 
 /* Tâches rapides (panneau gauche) */
 #quick{position:fixed;top:0;bottom:0;left:0;width:296px;max-width:88vw;z-index:18;background:var(--panel);color:var(--text);border-right:1px solid var(--line);box-shadow:8px 0 30px #0008;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;overflow:hidden;visibility:hidden;transform:translateX(-104%);transition:transform .22s ease,visibility 0s linear .22s}
@@ -289,12 +289,54 @@ body[data-theme="solo"] .page.active>*{animation:sgPg .5s steps(1,end)}
 @keyframes sgScan{0%{opacity:1}30%{opacity:.4}50%{opacity:.9}75%{opacity:.35}100%{opacity:0}}
 @keyframes sgPg{0%{transform:translateX(-7px) skewX(2deg);filter:saturate(3.2) hue-rotate(40deg) blur(1.6px)}14%{transform:translateX(6px);filter:saturate(2.6) hue-rotate(-30deg) blur(.9px)}28%{transform:translateX(-4px) skewX(-1.5deg);filter:saturate(3.2) blur(2px)}42%{transform:translateX(3px);filter:saturate(1.9) hue-rotate(20deg)}58%{transform:translateX(-1px);filter:saturate(1.5) blur(.6px)}74%{transform:none;filter:saturate(1.2)}100%{transform:none;filter:none}}
 @media (prefers-reduced-motion:reduce){body[data-theme="solo"] .page.active::before,body[data-theme="solo"] .page.active::after{display:none}body[data-theme="solo"] .page.active>*{animation:none}}
+
+/* Bouton animations (en-tête) */
+#animBtn .slash{display:none}body.noanim #animBtn .slash{display:block}
+/* Mobile : en-tête descendu sous la barre d'état (batterie, réseau…) + zones de clic plus grandes */
+@media(max-width:700px),(pointer:coarse){
+header{box-sizing:border-box;padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;height:auto!important;min-height:calc(68px + env(safe-area-inset-top,0px))}
+body[data-theme="persona"] header{min-height:calc(74px + env(safe-area-inset-top,0px))}
+.iconbtn{width:44px;height:44px}.head-actions{gap:6px}
+.trsw{min-height:34px;padding:5px 12px 5px 6px}
+#quick{padding-top:calc(16px + env(safe-area-inset-top,0px))}}
+body.mobile header{box-sizing:border-box;padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;height:auto!important;min-height:calc(62px + env(safe-area-inset-top,0px))}
+/* Pop-up de défi (bloquant) */
+#chOv{position:fixed;inset:0;z-index:80;display:none;overflow:auto;background:rgba(0,0,0,.74);padding:calc(18px + env(safe-area-inset-top,0px)) 16px 32px}
+#chOv.on{display:block}
+.chwrap{max-width:460px;margin:0 auto;display:grid;gap:14px}
+.chcard{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 18px 50px #000a;animation:chin .28s ease}
+@keyframes chin{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.chtag{display:inline-block;font-weight:900;font-size:11px;letter-spacing:.14em;padding:3px 10px;border-radius:6px;background:var(--accent);color:var(--ink,#fff)}
+.chfrom{margin:12px 0 8px}.chcat{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.06em;padding:3px 10px;border:1px solid var(--line);border-radius:99px;margin-bottom:10px}
+.chtext{font-size:19px;font-weight:800;line-height:1.3;margin-bottom:10px;word-break:break-word}
+body[data-theme="persona"] .chcard{background:#000;border:3px solid #fff;border-radius:0;box-shadow:8px 8px 0 var(--accent);transform:rotate(-1deg)}
+body[data-theme="persona"] .chtag{border-radius:0;transform:skewX(-14deg);padding:3px 14px}
+body[data-theme="persona"] .chtext{font-size:24px;text-transform:uppercase}
+body[data-theme="persona"] .chcat{border-radius:0;border:2px solid var(--accent);color:var(--accent)}
+body[data-theme="solo"] .chcard{background:linear-gradient(180deg,#1f4fc8f5,#173ca6f8);border:1px solid #8fcaff;border-radius:3px;box-shadow:0 0 30px #5b95f0aa}
+body[data-theme="solo"] .chtag{background:transparent;border:1px solid #8fcaff;color:#cfeaff;border-radius:2px;text-shadow:0 0 8px #8fcaff}
+body[data-theme="solo"] .chcat{border-radius:2px;border-color:#8fcaff99}
+body[data-theme="bloodborne"] .chcard{background:#0e0a0b;border:1px solid #5a4630;border-left:3px solid var(--accent);border-radius:0}
+body[data-theme="bloodborne"] .chtag{background:transparent;color:#c9a66b;border:1px solid #5a4630;border-radius:0}
+body[data-theme="bloodborne"] .chcat{border-radius:0;border-color:#5a4630}
+body[data-theme="sao"] .chcard{background:#f8fbfe;border:1px solid #9bd3ff;box-shadow:0 10px 40px rgba(60,140,220,.4)}
+
+body.noanim *,body.noanim *::before,body.noanim *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+body.noanim[data-theme="solo"] .page.active::before,body.noanim[data-theme="solo"] .page.active::after,body.noanim[data-theme="persona"] .page.active::before,body.noanim[data-theme="persona"] .page.active::after{display:none!important}
+
+/* Série de semaines réussies */
+.streak{display:flex;gap:10px;margin-top:12px}
+.sk{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:9px 11px;background:var(--panel2)}
+.sk small{display:block;font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:800}
+.sk b{display:block;font-size:24px;font-weight:850;line-height:1.15}
+.sk-res.ok b{color:var(--good,#7dffb0)}.sk-res.ko b{color:#ff6b6b}
+body[data-theme="persona"] .sk,body[data-theme="solo"] .sk,body[data-theme="bloodborne"] .sk{border-radius:0}
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onload="window.sbInit&&sbInit()"></script>
 </head>
 <body data-theme="persona">
 <div class="app">
-<header><span class="trslot"></span><div class="brand">OVTB<span> / </span>SOCIAL PLAYER SYSTEM</div><div class="head-actions"><button class="iconbtn" id="mobBtn" title="Version mobile" aria-pressed="false" onclick="toggleMobile()"><svg class="i-phone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg><svg class="i-desk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button class="iconbtn" title="Notifications" onclick="showToast('Aucune nouvelle notification')">♧</button><button class="iconbtn" title="Paramètres" onclick="go('settings')">⚙</button></div></header>
+<header><span class="trslot"></span><div class="brand">OVTB<span> / </span>SOCIAL PLAYER SYSTEM</div><div class="head-actions"><button class="iconbtn on" id="animBtn" title="Animations" aria-pressed="true" onclick="setAnim(S.anim===false)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path class="slash" d="M4 20L20 4"/></svg></button><button class="iconbtn" id="mobBtn" title="Version mobile" aria-pressed="false" onclick="toggleMobile()"><svg class="i-phone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg><svg class="i-desk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button class="iconbtn" title="Notifications" onclick="showToast('Aucune nouvelle notification')">♧</button><button class="iconbtn" title="Paramètres" onclick="go('settings')">⚙</button></div></header>
 <main>
 <section id="home" class="page active"></section>
 <section id="skills" class="page"></section>
@@ -354,7 +396,7 @@ document.getElementById('radar').innerHTML=g}
 const $=id=>document.getElementById(id);
 const KEY='ovtbState_v1',PTS={'Facile':1,'Moyenne':3,'Difficile':5,'Très difficile':10},TYPES={weekly:'Hebdomadaire',once:'Ponctuelle',goal:'Objectif'};
 const TZS=['Asia/Tokyo','Asia/Seoul','Asia/Shanghai','Asia/Dubai','Europe/London','Europe/Paris','Europe/Moscow','Africa/Casablanca','America/New_York','America/Chicago','America/Los_Angeles','America/Toronto','Australia/Sydney','Pacific/Auckland'];
-const def=()=>({tz:'Asia/Tokyo',profile:{name:'',desc:'',photo:null},cats:['Force','Intelligence','Social','Catégorie 4','Catégorie 5'].map((n,i)=>({id:'c'+i,name:n,pts:0,pub:false})),missions:[],goals:[],history:[],week:null,notif:[true,true,true,true],todos:[],todoOpen:false,grp:null,force:{h:null,w:null,age:null,act:'sed',actTxt:'',goal:'none',target:null,paths:['air'],done:{}},lang:'fr',bi:{on:false,lang:'en'},tl:0,cur:{cat:'c0',goal:null,filter:'all'}});
+const def=()=>({tz:'Asia/Tokyo',profile:{name:'',desc:'',photo:null},cats:['Force','Intelligence','Social','Catégorie 4','Catégorie 5'].map((n,i)=>({id:'c'+i,name:n,pts:0,pub:false})),missions:[],goals:[],history:[],bestStreak:0,week:null,notif:[true,true,true,true],todos:[],todoOpen:false,anim:true,grp:null,force:{h:null,w:null,age:null,act:'sed',actTxt:'',goal:'none',target:null,paths:['air'],done:{}},lang:'fr',bi:{on:false,lang:'en'},tl:0,cur:{cat:'c0',goal:null,filter:'all'}});
 let S;try{S=Object.assign(def(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){S=def()}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){showToast('Stockage plein : exporte tes données')}if(typeof schedPush==='function')schedPush()};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -406,12 +448,12 @@ function olCard(){if(!sb)return'<p>Mode en ligne indisponible hors connexion.</p
 if(!OL.user)return`<p>Connecte-toi pour partager ta progression avec ton groupe.</p><div class="fields"><div class="field"><label>E-mail</label><input id="olE" type="email" autocomplete="email"></div><div class="field"><label>Mot de passe</label><input id="olP" type="password" autocomplete="current-password"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" onclick="olSign(false)">Se connecter</button><button class="btn secondary" onclick="olSign(true)">Créer un compte</button><button class="btn secondary" onclick="olForgot()">Mot de passe oublié ?</button></div></div>`;
 if(!S.grp)return`<p>Crée un groupe ou rejoins celui de tes amis avec son code.</p><div class="fields"><div class="field"><label>Nom du groupe</label><input id="olN" maxlength="40"></div><button class="btn" onclick="olCreate()">Créer le groupe</button><div class="field"><label>Code d’invitation</label><input id="olC" maxlength="12" autocapitalize="characters"></div><button class="btn secondary" onclick="olJoin()">Rejoindre</button><button class="btn secondary" onclick="olOut()">Se déconnecter</button></div>`;
 return`<p><b>${esc(S.grp.name)}</b></p><p>Code d’invitation · <b>${esc(S.grp.code)}</b></p><div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn secondary" onclick="olCopy()">Copier le code</button><button class="btn secondary" onclick="olOut()">Se déconnecter</button></div><p class="small" style="margin-top:8px">${esc(OL.user.email||'')}</p>`}
-function pubData(){const f=S.force,rk=fRank();return{v:1,desc:S.profile.desc||'',trd:S.profile.trd||'',lang:S.lang||'fr',pct:wpct(),wpts:wpts(),body:{h:f.h,w:f.w,age:f.age,act:f.act,actTxt:f.actTxt,goal:f.goal,target:f.target},force:{rank:rk.r,n:rk.n,t:rk.t,paths:f.paths,done:Object.keys(f.done)},cats:S.cats.map(c=>({id:c.id,name:c.name,tr:c.tr||null,pub:!!c.pub,mast:Math.round(mast(c)*100)/100,pts:c.pts,goals:c.pub?S.goals.filter(g=>g.cat===c.id).map(g=>({title:g.title,tr:g.tr||null,active:g.active,steps:g.steps.map(x=>({title:x.title,tr:x.tr||null}))})):[]}))}}
+function pubData(){const f=S.force,rk=fRank();return{v:1,ch:{o:chs().out,i:chs().inn},desc:S.profile.desc||'',trd:S.profile.trd||'',lang:S.lang||'fr',pct:wpct(),wpts:wpts(),body:{h:f.h,w:f.w,age:f.age,act:f.act,actTxt:f.actTxt,goal:f.goal,target:f.target},force:{rank:rk.r,n:rk.n,t:rk.t,paths:f.paths,done:Object.keys(f.done)},cats:S.cats.map(c=>({id:c.id,name:c.name,tr:c.tr||null,pub:!!c.pub,mast:Math.round(mast(c)*100)/100,pts:c.pts,goals:c.pub?S.goals.filter(g=>g.cat===c.id).map(g=>({title:g.title,tr:g.tr||null,active:g.active,steps:g.steps.map(x=>({title:x.title,tr:x.tr||null}))})):[]}))}}
 function schedPush(){if(!sb||!OL.user||!S.grp)return;clearTimeout(pt);pt=setTimeout(pushNow,1500)}
 async function pushNow(){if(!sb||!OL.user||!S.grp)return;const g=S.grp.id,u=OL.user.id,t=new Date().toISOString();const a=await sb.from('player_state').upsert({group_id:g,user_id:u,pseudo:S.profile.name||'',data:pubData(),updated_at:t},{onConflict:'group_id,user_id'});const b=await sb.from('weekly').upsert({group_id:g,user_id:u,week:S.week,pct:wpct(),pts:wpts(),updated_at:t},{onConflict:'group_id,user_id,week'});if(a.error||b.error)console.warn('sync',a.error||b.error)}
-async function pull(){if(!sb||!OL.user||!S.grp)return;const g=S.grp.id,[a,b]=await Promise.all([sb.from('player_state').select('user_id,pseudo,data,updated_at').eq('group_id',g),sb.from('weekly').select('user_id,pct,pts').eq('group_id',g).eq('week',S.week)]);if(a.error)return;OL.rows=a.data||[];OL.wk=b.data||[];const pg=document.querySelector('.page.active');if(pg&&pg.id==='players')renderPlayers()}
+async function pull(){if(!sb||!OL.user||!S.grp)return;const g=S.grp.id,[a,b]=await Promise.all([sb.from('player_state').select('user_id,pseudo,data,updated_at').eq('group_id',g),sb.from('weekly').select('user_id,pct,pts').eq('group_id',g).eq('week',S.week)]);if(a.error)return;OL.rows=a.data||[];OL.wk=b.data||[];try{chExpire();chOverlay()}catch(e){}const pg=document.querySelector('.page.active');if(pg&&pg.id==='players')renderPlayers()}
 function startSync(){stopSync();if(!sb||!OL.user||!S.grp)return;pushNow().then(pull);const f='group_id=eq.'+S.grp.id;OL.ch=sb.channel('g-'+S.grp.id).on('postgres_changes',{event:'*',schema:'public',table:'player_state',filter:f},pull).on('postgres_changes',{event:'*',schema:'public',table:'weekly',filter:f},pull).subscribe();OL.iv=setInterval(pull,60000)}
-function stopSync(){try{if(OL.ch&&sb)sb.removeChannel(OL.ch)}catch(e){}OL.ch=null;clearInterval(OL.iv);OL.rows=[];OL.wk=[]}
+function stopSync(){try{if(OL.ch&&sb)sb.removeChannel(OL.ch)}catch(e){}OL.ch=null;clearInterval(OL.iv);OL.rows=[];OL.wk=[];try{chOverlay()}catch(e){}}
 function rankBlock(){const wk=Object.fromEntries(OL.wk.map(x=>[x.user_id,x])),L=OL.rows.map(r=>({id:r.user_id,name:r.pseudo||'?',pct:wk[r.user_id]?+wk[r.user_id].pct:(r.data&&r.data.pct)||0,pts:wk[r.user_id]?wk[r.user_id].pts:(r.data&&r.data.wpts)||0,rk:(r.data&&r.data.force&&r.data.force.rank)||''})).sort((a,b)=>b.pct-a.pct||b.pts-a.pts),ok=L.every(x=>x.pct>=80);
 return`<p class="small"><b>${esc(S.grp.name)}</b> · ${ok?'Groupe réussi cette semaine !':'Il manque des joueurs sous les 80 %.'}</p><div class="list">${L.map((x,i)=>`<div class="item" role="button" tabindex="0" onclick="olPlayer('${x.id}')"><b style="color:var(--accent);width:24px">#${i+1}</b><div class="profilepic" style="width:38px;height:38px;border-radius:12px">♙</div><div class="grow"><b>${esc(x.name)}${x.id===OL.user.id?' <span class="small">(toi)</span>':''}</b><p>${x.pct} % de l’objectif</p></div><span class="pill accent">${esc(x.rk)}</span><b>${x.pts} pts</b></div>`).join('')}</div><p class="small" style="margin-top:8px">Le groupe réussit seulement si tous les joueurs atteignent 80 %.</p>`}
 function olPlayer(uid){const r=OL.rows.find(x=>x.user_id===uid);if(!r)return;const d=r.data||{},nm=r.pseudo||'?',fo=d.force||{},b=d.body||{};OL.cur=uid;OL.curTitle=nm;
@@ -440,17 +482,17 @@ function leftMs(){const t=tp();return((7-t.di)*86400-(t.h*3600+t.m*60+t.s))*1000
 const dateStr=()=>new Date().toLocaleDateString(LOC[S.lang||'fr'],{timeZone:S.tz,weekday:'long',day:'numeric',month:'long'}).toUpperCase();
 function wpct(){const w=S.missions.filter(m=>m.type==='weekly'),t=w.reduce((a,m)=>a+m.pts,0);return t?Math.round(w.reduce((a,m)=>a+m.pts*Math.min(1,m.done/m.target),0)/t*100):0}
 const wpts=()=>S.missions.filter(m=>m.type==='weekly'&&m.done>=m.target).reduce((a,m)=>a+m.pts,0);
-function rollover(){const k=weekKey();if(S.week===k)return;if(S.week){const w=S.missions.filter(m=>m.type==='weekly');S.history.unshift({week:S.week,pct:wpct(),done:w.filter(m=>m.done>=m.target).length,total:w.length,pts:wpts()});S.history=S.history.slice(0,80);w.forEach(m=>{m.done=0;m.day=null})}(S.todos||[]).forEach(t=>{if(t.kind==='weekly')t.done=false});S.week=k;save()}
-function tick(){const e=$('countdown');if(!e)return;const ms=leftMs();e.textContent=Math.floor(ms/864e5)+'j '+Math.floor(ms%864e5/36e5)+'h '+Math.floor(ms%36e5/6e4)+'min'}
+function rollover(){const k=weekKey();if(S.week===k)return;if(S.week){const w=S.missions.filter(m=>m.type==='weekly');S.history.unshift({week:S.week,pct:wpct(),done:w.filter(m=>m.done>=m.target).length,total:w.length,pts:wpts()});S.history=S.history.slice(0,80);S.bestStreak=Math.max(S.bestStreak||0,streakInfo().best);w.forEach(m=>{m.done=0;m.day=null})}(S.todos||[]).forEach(t=>{if(t.kind==='weekly')t.done=false});S.week=k;save()}
+function tick(){const e=$('countdown');if(!e)return;const ms=leftMs();e.textContent=Math.floor(ms/864e5)+'j '+Math.floor(ms%864e5/36e5)+'h '+Math.floor(ms%36e5/6e4)+'min';paintStreak()}
 /* navigation */
 const R={home:()=>renderHome(),skills:()=>renderSkills(),missions:()=>renderMissions(),players:()=>renderPlayers(),events:()=>renderEvents(),settings:()=>renderSettings()};
-function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===p));R[p]();window.scrollTo({top:0,behavior:'smooth'})}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===p));R[p]();window.scrollTo({top:0,behavior:S.anim===false?'auto':'smooth'})}
 function renderAll(){R[document.querySelector('.page.active').id]()}
 /* accueil */
 function renderHome(){const mx=Math.max(20,...S.cats.map(c=>c.pts)),rm=Math.max(2,Math.ceil(Math.max(...S.cats.map(mast))-1e-9)),p=wpct(),has=S.missions.some(m=>m.type==='weekly'),pr=S.profile;
 $('home').innerHTML=`<div class="eyebrow">${esc(dateStr())}</div><h1>${esc(pr.name||'Bienvenue')}</h1>
 <div class="grid homegrid"><div class="card"><div class="row"><div class="profilepic">${pr.photo?`<img alt="" src="${pr.photo}">`:'<span class="avatar-placeholder">＋</span>'}</div><div class="grow"><div class="tag">PROFIL</div><div class="profile-name">${esc(pr.name||'Ton pseudo')}</div><p>${esc((S.bi.on&&S.tl&&pr.trd)||pr.desc||'Ajoute pseudo, description et photo dans Réglages.')}</p>${forceBadges()}</div><button class="iconbtn" onclick="go('settings')">✎</button></div><div style="height:18px"></div><div class="eyebrow">STATISTIQUES GÉNÉRALES<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('stats')">i</button></div><div class="statwrap"><svg class="radar" id="radar" viewBox="-45 0 390 270" role="img" aria-label="Radar des statistiques"></svg><div class="statlist">${S.cats.map(c=>`<div><div class="statrow"><span>${esc(tx(c,'name'))}</span><b>${fmt(mast(c))}</b></div><div class="bar"><i style="width:${Math.min(100,mast(c)/rm*100)}%"></i></div><p class="small" style="margin:3px 0 0">Effort · ${c.pts} pts</p></div>`).join('')}<p class="small" style="margin-top:4px">Forme pleine = maîtrise (niveaux d’objectifs) · pointillés = effort (missions)</p></div></div></div>
-<div class="grid"><div class="card"><div class="eyebrow">OBJECTIF HEBDOMADAIRE<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('week')">i</button></div><div class="big-number">${has?p+' %':'—'}<span style="font-size:16px;color:var(--muted)"> / 80 % requis</span></div><div class="progress"><i style="width:${p}%"></i></div><p class="small">${has?(p>=80?'Objectif de la semaine atteint.':'Encore '+(80-p)+' % pour atteindre ton objectif.'):'Crée des missions hebdomadaires pour suivre ta semaine.'}</p></div><div class="card"><div class="eyebrow">FIN DU CYCLE</div><div class="big-number" id="countdown"></div><p>Dimanche 23 h 59 · ${esc(S.tz)}</p></div></div></div>
+<div class="grid"><div class="card"><div class="eyebrow">OBJECTIF HEBDOMADAIRE<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('week')">i</button></div><div class="big-number">${has?p+' %':'—'}<span style="font-size:16px;color:var(--muted)"> / 80 % requis</span></div><div class="progress"><i style="width:${p}%"></i></div><p class="small">${has?(p>=80?'Objectif de la semaine atteint.':'Encore '+(80-p)+' % pour atteindre ton objectif.'):'Crée des missions hebdomadaires pour suivre ta semaine.'}</p></div><div class="card"><div class="eyebrow">FIN DU CYCLE</div><div class="big-number" id="countdown"></div><p>Dimanche 23 h 59 · ${esc(S.tz)}</p><div class="streak" id="streak"></div><p class="small">Semaines réussies à la suite. Remise à 0 après un échec.</p></div></div></div>
 <div class="actions"><button class="action" onclick="go('skills')"><span class="sym">⌘</span><b>Compétences</b><span class="small muted">Arbres & objectifs</span></button><button class="action" onclick="go('missions')"><span class="sym">☷</span><b>Missions</b><span class="small muted">Suivre la semaine</span></button><button class="action" onclick="go('players')"><span class="sym">♙</span><b>Joueurs</b><span class="small muted">Classement</span></button><button class="action" onclick="go('events')"><span class="sym">✧</span><b>Événements</b><span class="small muted">Défis du groupe</span></button></div>`;
 renderRadar(S.cats.map(c=>[tx(c,'name'),Math.min(100,mast(c)/rm*100)]),S.cats.map(c=>Math.min(100,c.pts/mx*100)));tick()}
 /* compétences */
@@ -480,7 +522,7 @@ function mSteps(v){const g=S.goals.find(x=>x.id===$('mGo').value);$('mSt').inner
 function saveMission(id){const [ta,tb]=g2('mN'),[da,db]=g2('mD'),t=ta||tb,ty=$('mT').value;if(!t){showToast('Ajoute un nom de mission');return}if(ty==='weekly'&&$('mFr').value==='days'&&!getDays('mDy').length){showToast('Choisis au moins un jour');return}if(ty==='goal'&&!S.goals.length){showToast('Crée d’abord un objectif');return}let m=S.missions.find(x=>x.id===id);if(!m){m={id:uid(),done:0};S.missions.unshift(m)}const dy=ty==='weekly'&&$('mFr').value==='daily',ds=ty==='weekly'&&$('mFr').value==='days',dd=ds?getDays('mDy'):[],mode=dy||ds?'count':$('mM').value;Object.assign(m,{title:t,desc:$('mD').value.trim(),cat:$('mC').value,type:ty,diff:$('mDf').value,pts:PTS[$('mDf').value],mode,freq:dy?'daily':ds?'days':'week',target:ds?dd.length:mode==='count'?Math.max(1,Math.min(dy?7:9999,+$('mTv').value||1)):1});if(!dy&&!ds)delete m.day;if(ds)m.days=dd;else delete m.days;if((dy||ds)&&$('mBy').value)m.by=$('mBy').value;else delete m.by;setTx(m,'title',ta,tb);setTx(m,'desc',da,db);if(ty==='goal'){m.goalId=$('mGo').value;m.stepIdx=+$('mSt').value}else{delete m.goalId;delete m.stepIdx}m.done=Math.min(m.done,m.target);save();closeModal();renderAll();showToast(id?'Mission modifiée':'Mission créée')}
 function delMission(id){S.missions=S.missions.filter(m=>m.id!==id);save();closeModal();renderAll()}
 /* joueurs, événements */
-function renderPlayers(){const pr=S.profile;$('players').innerHTML=`<div class="eyebrow">TON GROUPE</div><h1>Joueurs<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('players')">i</button></h1><div class="card"><div class="row between"><div><div class="eyebrow">CLASSEMENT HEBDOMADAIRE</div><h2>Semaine en cours</h2></div><span class="pill accent">RESET LUNDI</span></div>${olOn()?rankBlock():''}<div ${olOn()?'hidden':''}><div class="list"><div class="item"><b style="color:var(--accent);width:24px">#1</b><div class="profilepic" style="width:38px;height:38px;border-radius:12px">${pr.photo?`<img alt="" src="${pr.photo}">`:'♙'}</div><div class="grow"><b>${esc(pr.name||'Toi')}</b><p>${wpct()} % de l’objectif</p></div><b>${wpts()} pts</b></div></div><div class="notice" style="margin-top:12px">Les autres membres apparaîtront ici quand le groupe sera connecté en ligne.</div></div></div><div class="card" style="margin-top:14px"><h2>Historique des semaines</h2><div class="list">${S.history.map(h=>`<div class="item"><div class="grow"><b>Semaine du ${esc(h.week)}</b><p>${h.done}/${h.total} missions · ${h.pts} pts</p></div><b style="color:${h.pct>=80?'var(--good)':'var(--muted)'}">${h.pct} %</b></div>`).join('')||'<p>Aucune semaine terminée pour le moment.</p>'}</div></div>`}
+function renderPlayers(){const pr=S.profile;$('players').innerHTML=`<div class="eyebrow">TON GROUPE</div><h1>Joueurs<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('players')">i</button></h1><div class="card"><div class="row between"><div><div class="eyebrow">CLASSEMENT HEBDOMADAIRE</div><h2>Semaine en cours</h2></div><span class="pill accent">RESET LUNDI</span></div>${olOn()?rankBlock():''}<div ${olOn()?'hidden':''}><div class="list"><div class="item"><b style="color:var(--accent);width:24px">#1</b><div class="profilepic" style="width:38px;height:38px;border-radius:12px">${pr.photo?`<img alt="" src="${pr.photo}">`:'♙'}</div><div class="grow"><b>${esc(pr.name||'Toi')}</b><p>${wpct()} % de l’objectif</p></div><b>${wpts()} pts</b></div></div><div class="notice" style="margin-top:12px">Les autres membres apparaîtront ici quand le groupe sera connecté en ligne.</div></div></div>${chCards()}<div class="card" style="margin-top:14px"><h2>Historique des semaines</h2><div class="list">${S.history.map(h=>`<div class="item"><div class="grow"><b>Semaine du ${esc(h.week)}</b><p>${h.done}/${h.total} missions · ${h.pts} pts</p></div><b style="color:${h.pct>=80?'var(--good)':'var(--muted)'}">${h.pct} %</b></div>`).join('')||'<p>Aucune semaine terminée pour le moment.</p>'}</div></div>`}
 function renderEvents(){$('events').innerHTML=`<div class="eyebrow">DÉFIS COLLECTIFS</div><h1>Événements<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('events')">i</button></h1><div class="card"><h2>Aucun événement actif</h2><p>L’hôte du groupe pourra lancer un événement (nom, dates, missions). Disponible quand le groupe sera connecté en ligne.</p></div>`}
 /* réglages */
 function setPhoto(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),k=Math.min(1,256/Math.max(im.width,im.height));c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.profile.photo=c.toDataURL('image/jpeg',.82);save();showToast('Photo enregistrée')};im.src=r.result};r.readAsDataURL(f)}
@@ -521,13 +563,13 @@ const SEL='button,[role="button"],input,select,textarea,label.btn,a[href]',PAGES
 let cur=null,prev=[],rep={},last=0;
 const ok=e=>{if(e.disabled||e.type==='hidden'||e.closest('.hidden'))return false;const r=e.getBoundingClientRect();if(r.width<4||r.height<4)return false;if(getComputedStyle(e).visibility==='hidden')return false;if(r.bottom<0||r.top>innerHeight+2000)return false;return true};
 function cands(){const m=$('modal'),root=m.classList.contains('open')?m:document;let l=[...root.querySelectorAll(SEL)].filter(ok);if(!m.classList.contains('open')&&!document.body.classList.contains('qopen'))l=l.filter(e=>!e.closest('#quick')&&e.id!=='qback');if(!m.classList.contains('open')&&document.body.classList.contains('qopen'))l=l.filter(e=>e.closest('#quick')||e.closest('.bottomnav'));return l.filter(e=>!(e.tagName==='INPUT'&&e.type==='file'&&e.hidden))}
-function setCur(e){if(cur)cur.classList.remove('gpfocus');cur=e;if(e){e.classList.add('gpfocus');e.scrollIntoView({block:'center',inline:'nearest',behavior:'smooth'})}}
+function setCur(e){if(cur)cur.classList.remove('gpfocus');cur=e;if(e){e.classList.add('gpfocus');e.scrollIntoView({block:'center',inline:'nearest',behavior:S.anim===false?'auto':'smooth'})}}
 function move(dx,dy){const l=cands();if(!l.length)return;if(!cur||!l.includes(cur)){const first=l.find(e=>{const r=e.getBoundingClientRect();return r.top>=60&&r.bottom<=innerHeight-70})||l[0];setCur(first);return}
 const a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;let best=null,bs=1e9;
 for(const e of l){if(e===cur)continue;const r=e.getBoundingClientRect(),cx=r.left+r.width/2-ax,cy=r.top+r.height/2-ay;if((dx?cx*dx:cy*dy)<=2)continue;
 let main,side;if(dx){main=dx>0?r.left-a.right:a.left-r.right;side=Math.max(0,Math.max(r.top-a.bottom,a.top-r.bottom))}else{main=dy>0?r.top-a.bottom:a.top-r.bottom;side=Math.max(0,Math.max(r.left-a.right,a.left-r.right))}
 const sc=Math.max(0,main)+side*3+Math.abs(dx?cy:cx)*.2;if(sc<bs){bs=sc;best=e}}
-if(best)setCur(best);else window.scrollBy({top:dy*160,left:dx*160,behavior:'smooth'})}
+if(best)setCur(best);else window.scrollBy({top:dy*160,left:dx*160,behavior:S.anim===false?'auto':'smooth'})}
 function press(){if(!cur)return;const e=cur;if(e.tagName==='SELECT'){const i=(e.selectedIndex+1)%e.options.length;e.selectedIndex=i;e.dispatchEvent(new Event('change',{bubbles:true}));return}
 if(e.tagName==='INPUT'&&(e.type==='text'||e.type==='number'||e.type==='search')||e.tagName==='TEXTAREA'){e.focus();return}
 if(e.tagName==='LABEL'){const i=e.querySelector('input');if(i&&i.type==='file'){i.click();return}}
@@ -829,6 +871,43 @@ Maîtriser le L-step (esquive en boxe)‖Master the L-step (boxing dodge)‖Lス
 100 jabs par jour pendant 1 mois‖100 jabs a day for 1 month‖1か月間、毎日ジャブ100回‖100 jab al giorno per 1 mese‖100 jabs al día durante 1 mes‖100 jabs por dia durante 1 mês
 100 coups de pied par jour pendant 1 mois‖100 kicks a day for 1 month‖1か月間、毎日キック100回‖100 calci al giorno per 1 mese‖100 patadas al día durante 1 mes‖100 chutes por dia durante 1 mês
 100 droite-gauche par jour pendant 1 mois‖100 right-lefts a day for 1 month‖1か月間、毎日右左100回‖100 destro-sinistro al giorno per 1 mese‖100 derecha-izquierda al día durante 1 mes‖100 direita-esquerda por dia durante 1 mês`;DICT3.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
+const DICT5=`Défi reçu‖Challenge received‖チャレンジを受信‖Sfida ricevuta‖Reto recibido‖Desafio recebido
+Défi relevé‖Challenge completed‖チャレンジ達成‖Sfida superata‖Reto cumplido‖Desafio cumprido
+te lance un défi‖challenges you‖からチャレンジが届きました‖ti lancia una sfida‖te lanza un reto‖te lança um desafio
+a relevé ton défi‖completed your challenge‖があなたのチャレンジを達成しました‖ha superato la tua sfida‖ha cumplido tu reto‖cumpriu o seu desafio
+Récompense : +1 effort dans cette catégorie.‖Reward: +1 effort in this category.‖ごほうび：このカテゴリに努力+1。‖Premio: +1 impegno in questa categoria.‖Recompensa: +1 esfuerzo en esta categoría.‖Recompensa: +1 esforço nesta categoria.
+À accomplir avant la fin de la journée, sans conséquence en cas d’échec.‖To complete before the end of the day, no consequence if you fail.‖今日中に達成してください。失敗してもペナルティはありません。‖Da completare entro la fine della giornata, nessuna conseguenza se fallisci.‖Para cumplir antes de que acabe el día, sin consecuencias si fallas.‖Para cumprir antes do fim do dia, sem consequências se falhar.
+Accepter‖Accept‖受ける‖Accetta‖Aceptar‖Aceitar
+Refuser‖Decline‖断る‖Rifiuta‖Rechazar‖Recusar
+Défi du jour‖Challenge of the day‖今日のチャレンジ‖Sfida del giorno‖Reto del día‖Desafio do dia
+Défis en cours‖Ongoing challenges‖進行中のチャレンジ‖Sfide in corso‖Retos en curso‖Desafios em andamento
+Jusqu’à la fin de la journée‖Until the end of the day‖今日の終わりまで‖Fino a fine giornata‖Hasta el final del día‖Até o fim do dia
+Accompli‖Done‖達成‖Completata‖Cumplido‖Cumprido
+Défis envoyés‖Challenges sent‖送ったチャレンジ‖Sfide inviate‖Retos enviados‖Desafios enviados
+En attente‖Pending‖返事待ち‖In attesa‖Pendiente‖Pendente
+Accepté‖Accepted‖受諾‖Accettata‖Aceptado‖Aceito
+Refusé‖Declined‖辞退‖Rifiutata‖Rechazado‖Recusado
+Expiré‖Expired‖期限切れ‖Scaduta‖Expirado‖Expirado
+Lancer un défi‖Send a challenge‖チャレンジを送る‖Lancia una sfida‖Lanzar un reto‖Lançar um desafio
+Catégorie de l’ami‖Friend’s category‖友達のカテゴリ‖Categoria dell’amico‖Categoría del amigo‖Categoria do amigo
+Ton défi‖Your challenge‖チャレンジの内容‖La tua sfida‖Tu reto‖Seu desafio
+Ex. 20 pompes avant ce soir‖e.g. 20 push-ups before tonight‖例：今夜までに腕立て20回‖Es. 20 flessioni entro stasera‖Ej. 20 flexiones antes de esta noche‖Ex. 20 flexões até esta noite
+Petite récompense : +1 effort dans la catégorie choisie.‖Small reward: +1 effort in the chosen category.‖ささやかなごほうび：選んだカテゴリに努力+1。‖Piccolo premio: +1 impegno nella categoria scelta.‖Pequeña recompensa: +1 esfuerzo en la categoría elegida.‖Pequena recompensa: +1 esforço na categoria escolhida.
+Envoyer le défi‖Send challenge‖チャレンジを送信‖Invia la sfida‖Enviar el reto‖Enviar o desafio
+Un défi est déjà en attente de réponse.‖A challenge is already waiting for an answer.‖返事待ちのチャレンジがすでにあります。‖Una sfida è già in attesa di risposta.‖Ya hay un reto pendiente de respuesta.‖Já há um desafio aguardando resposta.
+Défi envoyé‖Challenge sent‖チャレンジを送りました‖Sfida inviata‖Reto enviado‖Desafio enviado
+Défi accepté‖Challenge accepted‖チャレンジを受けました‖Sfida accettata‖Reto aceptado‖Desafio aceito
+Défi refusé‖Challenge declined‖チャレンジを断りました‖Sfida rifiutata‖Reto rechazado‖Desafio recusado
+Défi accompli · +1 effort‖Challenge done · +1 effort‖チャレンジ達成 · 努力+1‖Sfida superata · +1 impegno‖Reto cumplido · +1 esfuerzo‖Desafio cumprido · +1 esforço
+Défi expiré‖Challenge expired‖チャレンジの期限が切れました‖Sfida scaduta‖Reto expirado‖Desafio expirado
+Écris le défi‖Write the challenge‖チャレンジの内容を書いてください‖Scrivi la sfida‖Escribe el reto‖Escreva o desafio
+Animations‖Animations‖アニメーション‖Animazioni‖Animaciones‖Animações`;DICT5.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
+const DICT6=`Série en cours‖Current streak‖連続達成中‖Serie in corso‖Racha actual‖Sequência atual
+Record‖Best‖最高記録‖Record‖Récord‖Recorde
+Semaine passée‖Last week‖先週‖Settimana scorsa‖Semana pasada‖Semana passada
+Réussite‖Success‖成功‖Riuscita‖Éxito‖Sucesso
+Échec‖Failure‖失敗‖Fallimento‖Fracaso‖Falha
+Semaines réussies à la suite. Remise à 0 après un échec.‖Weeks passed in a row. Resets to 0 after a failure.‖連続で達成した週の数。失敗すると0に戻ります。‖Settimane riuscite di fila. Si azzera dopo un fallimento.‖Semanas superadas seguidas. Vuelve a 0 tras un fallo.‖Semanas concluídas seguidas. Volta a 0 após uma falha.`;DICT6.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
 const trTo=(fr,L)=>{const e=DICT[fr];return e&&e[L]?e[L]:fr},F=fr=>S.bi.on&&S.tl&&S.bi.lang!=='fr'?trTo(fr,S.bi.lang):fr;
 const DICTL={};Object.keys(DICT).forEach(k=>DICTL[k.toLowerCase()]=DICT[k]);
 const UN={en:['d','h','min'],ja:['日','時間','分'],it:['g','h','min'],es:['d','h','min'],pt:['d','h','min']};
@@ -868,7 +947,65 @@ function setLang(l){S.lang=l;save();document.documentElement.lang=l;if($('qdays'
 function startTr(){document.documentElement.lang=S.lang||'fr';new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='characterData')trNode(m.target);else m.addedNodes.forEach(n=>{if(n.nodeType===3)trNode(n);else if(n.nodeType===1)trWalk(n)})})).observe(document.body,{childList:true,subtree:true,characterData:true});if((S.lang||'fr')!=='fr')trWalk(document.body)}
 function catName(i,v){if(i===0)return;const c=S.cats[i];v=v.trim();if(S.bi.on&&S.tl){if(v){(c.tr=c.tr||{}).name=v}else if(c.tr)delete c.tr.name}else c.name=v||'Catégorie '+(i+1);save()}
 function descIn(v){if(S.bi.on&&S.tl)S.profile.trd=v;else S.profile.desc=v;save()}
-rollover();renderHome();paintMobile();paintQuick();startTr();if(window.supabase)sbInit();
+
+/* ===== Animations : bouton général (en-tête) ===== */
+
+/* ===== Série de semaines réussies (≥ 80 %), remise à 0 au premier échec ===== */
+function prevWeek(d){const x=new Date(d+'T00:00:00Z');x.setUTCDate(x.getUTCDate()-7);return x.toISOString().slice(0,10)}
+function streakInfo(){const H=S.history||[],ok=h=>h.total>0&&h.pct>=80;let cur=0,exp=prevWeek(S.week||weekKey());
+for(const h of H){if(h.week!==exp||!ok(h))break;cur++;exp=prevWeek(exp)}
+let best=0,run=0,lw=null;[...H].reverse().forEach(h=>{if(!ok(h)){run=0;lw=null;return}run=(lw&&prevWeek(h.week)===lw)?run+1:1;lw=h.week;best=Math.max(best,run)});
+return{cur,best:Math.max(best,S.bestStreak||0)}}
+function paintStreak(){const el=$('streak');if(!el)return;const st=streakInfo(),t=tp(),last=(S.history||[])[0];
+const res=t.di===0&&t.h<10&&last&&last.week===prevWeek(S.week||weekKey())&&last.total>0;let h;
+if(res){const k=last.pct>=80;h=`<div class="sk sk-res ${k?'ok':'ko'}"><small>SEMAINE PASSÉE</small><b>${k?'RÉUSSITE':'ÉCHEC'}</b></div>`}
+else h=`<div class="sk"><small>SÉRIE EN COURS</small><b>${st.cur}</b></div>`;
+h+=`<div class="sk"><small>RECORD</small><b>${st.best}</b></div>`;if(el.__h!==h){el.__h=h;el.innerHTML=h}}
+function paintAnim(){const on=S.anim!==false;document.body.classList.toggle('noanim',!on);const b=$('animBtn');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)}}
+function setAnim(on){S.anim=!!on;save();paintAnim()}
+/* ===== Défis entre amis (transitent par player_state.data : aucune table en plus) ===== */
+const chs=()=>{S.ch=Object.assign({out:[],inn:{},seen:[]},S.ch||{});return S.ch};
+const chDay=()=>{const t=tp();return t.y+'-'+String(t.mo).padStart(2,'0')+'-'+String(t.d).padStart(2,'0')};
+const chOn=()=>!!(sb&&OL.user&&S.grp&&OL.rows.length);
+const chRow=u=>OL.rows.find(r=>r.user_id===u);
+const chData=u=>{const r=chRow(u);return r&&r.data||null};
+const chName=u=>{const r=chRow(u);return r&&r.pseudo||'?'};
+const chId=s=>typeof s==='string'&&/^[\w-]{1,40}$/.test(s);
+const chTxt=(s,n)=>String(s==null?'':s).slice(0,n);
+function chPrune(){const ch=chs(),lim=Date.now()-30*864e5;ch.out=ch.out.filter(c=>c.ts>lim).slice(-30);Object.keys(ch.inn).forEach(k=>{if((ch.inn[k].at||0)<lim)delete ch.inn[k]})}
+function chPending(){if(!chOn())return[];const me=OL.user.id,inn=chs().inn,res=[];
+OL.rows.forEach(r=>{if(r.user_id===me)return;const o=r.data&&r.data.ch&&r.data.ch.o;if(!Array.isArray(o))return;o.forEach(c=>{if(c&&c.to===me&&chId(c.id)&&!inn[c.id])res.push({id:c.id,from:r.user_id,cid:chTxt(c.cid,40),cat:chTxt(c.cat,40),text:chTxt(c.text,80),ts:+c.ts||0})})});return res.sort((a,b)=>a.ts-b.ts)}
+function chBlocked(to){const d=chData(to),ri=d&&d.ch&&d.ch.i||{};return chs().out.some(c=>c.to===to&&!ri[c.id])}
+function chNotices(){const ch=chs(),res=[];ch.out.forEach(c=>{const d=chData(c.to),r=d&&d.ch&&d.ch.i&&d.ch.i[c.id];if(r&&r.st==='done'&&!ch.seen.includes(c.id))res.push({id:c.id,who:chName(c.to),text:c.text,cat:c.cat})});return res}
+function chSeen(id){const ch=chs();ch.seen.push(id);ch.seen=ch.seen.slice(-60);save();chOverlay()}
+function chExpire(){const ch=chs(),k=chDay();let a=0;Object.keys(ch.inn).forEach(id=>{const e=ch.inn[id];if(e.st==='acc'&&e.day<k){e.st='exp';a=1}});if(a){save();chRefresh()}}
+function chRefresh(){chOverlay();const a=document.querySelector('.page.active');if(a&&(a.id==='players'||a.id==='home'))renderAll()}
+function chAnswer(id,acc){const p=chPending().find(x=>x.id===id);if(!p)return;const ch=chs();ch.inn[id]={from:p.from,st:acc?'acc':'dec',day:acc?chDay():null,at:Date.now(),cat:p.cat,cid:p.cid,text:p.text};chPrune();save();showToast(acc?'Défi accepté':'Défi refusé');chRefresh()}
+function chDone(id){const ch=chs(),e=ch.inn[id];if(!e||e.st!=='acc')return;
+if(e.day!==chDay()){e.st='exp';save();showToast('Défi expiré');return chRefresh()}
+e.st='done';e.at=Date.now();const c=cat(e.cid);if(c)c.pts+=1;save();showToast('Défi accompli · +1 effort');chRefresh()}
+function chOverlay(){let o=$('chOv');const on=chOn(),P=on?chPending():[],N=on?chNotices():[];
+if(!P.length&&!N.length){if(o){o.classList.remove('on');o.__sig='';o.innerHTML=''}return}
+const sig=P.map(x=>x.id).join()+'|'+N.map(x=>x.id).join();
+if(!o){o=document.createElement('div');o.id='chOv';o.setAttribute('role','alertdialog');o.setAttribute('aria-modal','true');document.body.appendChild(o)}
+if(o.__sig!==sig){o.__sig=sig;o.innerHTML='<div class="chwrap">'+P.map(c=>`<div class="chcard"><div class="chtag">DÉFI REÇU</div><p class="chfrom"><b>${esc(chName(c.from))}</b> te lance un défi</p><div class="chcat">${esc(c.cat)}</div><div class="chtext">${esc(c.text)}</div><p class="small">Récompense : +1 effort dans cette catégorie.</p><p class="small">À accomplir avant la fin de la journée, sans conséquence en cas d’échec.</p><div class="row" style="margin-top:14px"><button class="btn" onclick="chAnswer('${c.id}',true)">Accepter</button><button class="btn secondary" onclick="chAnswer('${c.id}',false)">Refuser</button></div></div>`).join('')
++N.map(c=>`<div class="chcard"><div class="chtag">DÉFI RELEVÉ</div><p class="chfrom"><b>${esc(c.who)}</b> a relevé ton défi</p><div class="chcat">${esc(c.cat)}</div><div class="chtext">${esc(c.text)}</div><div class="row" style="margin-top:14px"><button class="btn" onclick="chSeen('${c.id}')">OK</button></div></div>`).join('')+'</div>'}
+o.classList.add('on')}
+function chActiveList(){const ch=chs();return Object.keys(ch.inn).map(k=>Object.assign({id:k},ch.inn[k])).filter(e=>e.st==='acc').sort((a,b)=>a.at-b.at).map(e=>`<div class="item"><div class="grow"><b>${esc(e.text)}</b><p>${esc(chName(e.from))} · ${esc(e.cat)}</p><p class="small">Jusqu’à la fin de la journée</p></div><button class="btn" onclick="chDone('${e.id}')">Accompli</button></div>`).join('')}
+function chCards(){let h='';const a=chActiveList();if(a)h+=`<div class="card" style="margin-top:14px"><div class="eyebrow">DÉFI DU JOUR</div><h2>Défis en cours</h2><div class="list">${a}</div></div>`;
+const o=chs().out.slice(-6).reverse();
+if(o.length)h+=`<div class="card" style="margin-top:14px"><h2>Défis envoyés</h2><div class="list">${o.map(c=>{const d=chData(c.to),r=d&&d.ch&&d.ch.i&&d.ch.i[c.id],s=!r?'En attente':r.st==='acc'?'Accepté':r.st==='dec'?'Refusé':r.st==='done'?'Accompli':'Expiré';return`<div class="item"><div class="grow"><b>${esc(c.text)}</b><p>${esc(chName(c.to))} · ${esc(c.cat)}</p></div><span class="pill">${s}</span></div>`}).join('')}</div></div>`;return h}
+function chHomeCard(){const old=$('chHome');if(old)old.remove();const a=chActiveList();if(!a)return;const html=`<div class="card" id="chHome" style="margin-bottom:14px"><div class="eyebrow">DÉFI DU JOUR</div><div class="list">${a}</div></div>`,h=document.querySelector('#home h1');if(h)h.insertAdjacentHTML('afterend',html);else $('home').insertAdjacentHTML('afterbegin',html)}
+function chBtn(to){const d=chData(to);if(!d||!(d.cats&&d.cats.length))return'';if(chBlocked(to))return'<p class="small" style="margin-top:12px">Un défi est déjà en attente de réponse.</p>';return`<button class="btn" style="margin-top:14px" onclick="chForm('${to}')">Lancer un défi</button>`}
+function chForm(to){const d=chData(to);if(!d||chBlocked(to))return;
+openModal('Lancer un défi',`<p><b>${esc(chName(to))}</b></p><div class="field"><label>Catégorie de l’ami</label><select id="chCat">${(d.cats||[]).map(c=>`<option value="${esc(c.id)}">${esc(tx(c,'name'))}</option>`).join('')}</select></div><div class="field"><label>Ton défi</label><input id="chText" maxlength="80" placeholder="Ex. 20 pompes avant ce soir"></div><p class="small">Petite récompense : +1 effort dans la catégorie choisie.</p><button class="btn" style="margin-top:12px" onclick="chSend('${to}')">Envoyer le défi</button>`)}
+function chSend(to){const text=($('chText').value||'').trim().slice(0,80);if(!text){showToast('Écris le défi');return}if(chBlocked(to)){showToast('Un défi est déjà en attente de réponse.');return}
+const d=chData(to),c=((d&&d.cats)||[]).find(x=>x.id===$('chCat').value);if(!c)return;
+const ch=chs();ch.out.push({id:uid(),to,cid:c.id,cat:chTxt(c.name,40),text,ts:Date.now()});chPrune();save();closeModal();showToast('Défi envoyé');chRefresh()}
+const _op=olPlayer;olPlayer=function(u){_op(u);if(OL.user&&u!==OL.user.id)$('modalBody').insertAdjacentHTML('beforeend',chBtn(u))};
+const _rh=renderHome;renderHome=function(){_rh();chHomeCard()};
+setInterval(()=>{try{chExpire()}catch(e){}},60000);
+rollover();renderHome();paintMobile();paintQuick();paintAnim();startTr();if(window.supabase)sbInit();
 setInterval(()=>{const k=S.week;rollover();S.week!==k?renderAll():tick();chkRem();if(S.todoOpen)paintQuick();if(document.querySelector('.page.active').id==='missions')renderMissions()},30000);chkRem();paintSw();$('qdays').innerHTML=dayPick('qdp');
 if('serviceWorker' in navigator && location.protocol!=='file:'){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)location.reload()});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
