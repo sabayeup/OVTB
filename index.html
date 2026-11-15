@@ -284,7 +284,7 @@ body[data-theme="persona"] h2,body[data-theme="persona"] .profile-name,body[data
 
 /* Bloodborne : fondu doux lors du changement de page */
 body[data-theme="bloodborne"] .page.active{
-  animation:bbPageFade .82s ease both;
+  animation:bbPageFade 2s ease both;
 }
 @keyframes bbPageFade{
   from{opacity:0;filter:blur(2px);transform:translateY(5px)}
@@ -366,8 +366,9 @@ body.mobile[data-theme] .navbtn{font-size:9px;letter-spacing:.02em}
 
 #bellDot{position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--accent);color:var(--ink,#fff);font:800 10px/16px system-ui,sans-serif;text-align:center}#bellDot:empty{display:none}
 /* Version discrète sous la roue des paramètres */
-.head-actions .settings-version-slot{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px;flex:none}
-.head-actions .app-version{font:600 8px/10px system-ui,sans-serif;letter-spacing:.02em;color:var(--muted);white-space:nowrap;opacity:.82}
+.head-actions .settings-version-slot{position:relative;display:flex;align-items:center;justify-content:center;flex:none}
+.head-actions .app-version{position:absolute;top:calc(100% - 1px);left:50%;transform:translateX(-50%);font:700 9px/11px system-ui,sans-serif;letter-spacing:.01em;color:var(--text);white-space:nowrap;opacity:1;text-shadow:0 1px 3px #000;pointer-events:none}
+header,body[data-theme="persona"] header{overflow:visible!important}
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onload="window.sbInit&&sbInit()"></script>
 </head>
