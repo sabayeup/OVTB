@@ -384,10 +384,10 @@ function forceBadges(){const f=S.force;if(!f.paths.length)return'';const rk=fRan
 const SB_URL='https://zasyyklvsznkmkwcdmli.supabase.co',SB_KEY='sb_publishable_NORcxbV1mOpuWYAN9K4rIQ_i2P_qKQ6';
 let sb=null,OL={user:null,rows:[],wk:[],ch:null,iv:0,cur:null,curTitle:''},pt=0;
 const olOn=()=>!!(sb&&OL.user&&S.grp&&OL.rows.length);
-function sbInit(){if(sb||!window.supabase)return;try{sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}})}catch(e){return}
-sb.auth.getSession().then(({data})=>{OL.user=data.session?data.session.user:null;afterAuth()});
-sb.auth.onAuthStateChange((ev,ses)=>{OL.user=ses?ses.user:null;if(ev==='SIGNED_IN'||ev==='SIGNED_OUT')setTimeout(afterAuth,0)})}
-async function afterAuth(){if(OL.user&&!S.grp){const r=await sb.from('members').select('groups(id,name,code)').eq('user_id',OL.user.id).limit(1);const g=r.data&&r.data[0]&&r.data[0].groups;if(g){S.grp=g;save()}}
+function sbInit(){if(sb||!window.supabase)return;try{sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}catch(e){return}
+OL.rec=/type=recovery/.test(location.hash);sb.auth.getSession().then(({data})=>{OL.user=data.session?data.session.user:null;afterAuth();if(OL.rec&&OL.user)olRecoverUi()});
+sb.auth.onAuthStateChange((ev,ses)=>{OL.user=ses?ses.user:null;if(ev==='PASSWORD_RECOVERY'){OL.rec=true;setTimeout(olRecoverUi,0)}if(ev==='SIGNED_IN'||ev==='SIGNED_OUT')setTimeout(afterAuth,0)})}
+async function afterAuth(){if(OL.rec){stopSync();renderAll();return}if(OL.user&&!S.grp){const r=await sb.from('members').select('groups(id,name,code)').eq('user_id',OL.user.id).limit(1);const g=r.data&&r.data[0]&&r.data[0].groups;if(g){S.grp=g;save()}}
 if(OL.user&&S.grp)startSync();else stopSync();renderAll()}
 async function olSign(up){if(!sb){showToast('Connexion indisponible');return}const e=$('olE').value.trim(),p=$('olP').value;if(!e||p.length<6){showToast('E-mail et mot de passe (6 caractères min.)');return}
 const r=up?await sb.auth.signUp({email:e,password:p}):await sb.auth.signInWithPassword({email:e,password:p});if(r.error){showToast(r.error.message);return}if(up&&!r.data.session)showToast('Compte créé : connecte-toi')}
@@ -395,9 +395,15 @@ async function olOut(){if(sb)await sb.auth.signOut();S.grp=null;OL.user=null;sav
 async function loadGrp(id){const r=await sb.from('groups').select('id,name,code').eq('id',id).single();if(r.error){showToast(r.error.message);return}S.grp=r.data;save();startSync();renderAll()}
 async function olCreate(){const n=$('olN').value.trim();if(!n)return;const r=await sb.rpc('create_group',{gname:n});if(r.error){showToast(r.error.message);return}loadGrp(r.data)}
 async function olJoin(){const c=$('olC').value.trim();if(!c)return;const r=await sb.rpc('join_group',{gcode:c});if(r.error){showToast(r.error.message);return}loadGrp(r.data)}
+function olRecoverUi(){if(OL.recUi||!sb)return;OL.recUi=true;openModal('Nouveau mot de passe',`<p>Choisis un nouveau mot de passe (6 caractères min.).</p><div class="fields"><div class="field"><label>Nouveau mot de passe</label><input id="olN1" type="password" autocomplete="new-password"></div><div class="field"><label>Confirmer le mot de passe</label><input id="olN2" type="password" autocomplete="new-password"></div><button class="btn" onclick="olSetPw()">Changer le mot de passe</button></div>`)}
+async function olSetPw(){const a=$('olN1').value,b=$('olN2').value;if(a.length<6){showToast('Choisis un nouveau mot de passe (6 caractères min.).');return}if(a!==b){showToast('Les mots de passe ne correspondent pas');return}
+const r=await sb.auth.updateUser({password:a});if(r.error){showToast(r.error.message);return}
+OL.rec=false;OL.recUi=false;closeModal();history.replaceState(null,'',location.pathname+location.search);await sb.auth.signOut();showToast('Mot de passe modifié : connecte-toi');renderAll()}
+async function olForgot(){if(!sb)return;const el=$('olE'),e=el?el.value.trim():'';if(!e){showToast('Entre d’abord ton e-mail');return}
+const r=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.href.split('#')[0].split('?')[0]});showToast(r.error?r.error.message:'E-mail envoyé : ouvre le lien qu’il contient.')}
 function olCopy(){try{navigator.clipboard.writeText(S.grp.code);showToast('Code copié')}catch(e){}}
 function olCard(){if(!sb)return'<p>Mode en ligne indisponible hors connexion.</p>';
-if(!OL.user)return`<p>Connecte-toi pour partager ta progression avec ton groupe.</p><div class="fields"><div class="field"><label>E-mail</label><input id="olE" type="email" autocomplete="email"></div><div class="field"><label>Mot de passe</label><input id="olP" type="password" autocomplete="current-password"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" onclick="olSign(false)">Se connecter</button><button class="btn secondary" onclick="olSign(true)">Créer un compte</button></div></div>`;
+if(!OL.user)return`<p>Connecte-toi pour partager ta progression avec ton groupe.</p><div class="fields"><div class="field"><label>E-mail</label><input id="olE" type="email" autocomplete="email"></div><div class="field"><label>Mot de passe</label><input id="olP" type="password" autocomplete="current-password"></div><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn" onclick="olSign(false)">Se connecter</button><button class="btn secondary" onclick="olSign(true)">Créer un compte</button><button class="btn secondary" onclick="olForgot()">Mot de passe oublié ?</button></div></div>`;
 if(!S.grp)return`<p>Crée un groupe ou rejoins celui de tes amis avec son code.</p><div class="fields"><div class="field"><label>Nom du groupe</label><input id="olN" maxlength="40"></div><button class="btn" onclick="olCreate()">Créer le groupe</button><div class="field"><label>Code d’invitation</label><input id="olC" maxlength="12" autocapitalize="characters"></div><button class="btn secondary" onclick="olJoin()">Rejoindre</button><button class="btn secondary" onclick="olOut()">Se déconnecter</button></div>`;
 return`<p><b>${esc(S.grp.name)}</b></p><p>Code d’invitation · <b>${esc(S.grp.code)}</b></p><div class="row" style="gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn secondary" onclick="olCopy()">Copier le code</button><button class="btn secondary" onclick="olOut()">Se déconnecter</button></div><p class="small" style="margin-top:8px">${esc(OL.user.email||'')}</p>`}
 function pubData(){const f=S.force,rk=fRank();return{v:1,desc:S.profile.desc||'',trd:S.profile.trd||'',lang:S.lang||'fr',pct:wpct(),wpts:wpts(),body:{h:f.h,w:f.w,age:f.age,act:f.act,actTxt:f.actTxt,goal:f.goal,target:f.target},force:{rank:rk.r,n:rk.n,t:rk.t,paths:f.paths,done:Object.keys(f.done)},cats:S.cats.map(c=>({id:c.id,name:c.name,tr:c.tr||null,pub:!!c.pub,mast:Math.round(mast(c)*100)/100,pts:c.pts,goals:c.pub?S.goals.filter(g=>g.cat===c.id).map(g=>({title:g.title,tr:g.tr||null,active:g.active,steps:g.steps.map(x=>({title:x.title,tr:x.tr||null}))})):[]}))}}
@@ -743,7 +749,16 @@ Heure limite‖Deadline time‖期限の時刻‖Ora limite‖Hora límite‖Hor
 Supprimer la tâche‖Delete task‖タスクを削除‖Elimina attività‖Eliminar tarea‖Excluir tarefa
 Ouvrir les tâches rapides‖Open quick tasks‖クイックタスクを開く‖Apri le attività rapide‖Abrir tareas rápidas‖Abrir tarefas rápidas
 Activer les textes bilingues‖Enable bilingual texts‖バイリンガルテキストを有効にする‖Attiva i testi bilingui‖Activar textos bilingües‖Ativar textos bilíngues`;DICT2.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
-const DICT3=`E-mail‖Email‖メールアドレス‖E-mail‖Correo electrónico‖E-mail
+const DICT3=`Mot de passe oublié ?‖Forgot password?‖パスワードを忘れた場合‖Password dimenticata?‖¿Olvidaste tu contraseña?‖Esqueceu a senha?
+Nouveau mot de passe‖New password‖新しいパスワード‖Nuova password‖Nueva contraseña‖Nova senha
+Confirmer le mot de passe‖Confirm password‖パスワードの確認‖Conferma la password‖Confirmar contraseña‖Confirmar senha
+Changer le mot de passe‖Change password‖パスワードを変更‖Cambia password‖Cambiar contraseña‖Alterar senha
+Entre d’abord ton e-mail‖Enter your e-mail first‖先にメールアドレスを入力してください‖Inserisci prima la tua e-mail‖Escribe primero tu e-mail‖Digite seu e-mail primeiro
+E-mail envoyé : ouvre le lien qu’il contient.‖E-mail sent: open the link inside.‖メールを送信しました。中のリンクを開いてください。‖E-mail inviata: apri il link che contiene.‖E-mail enviado: abre el enlace que contiene.‖E-mail enviado: abra o link que ele contém.
+Les mots de passe ne correspondent pas‖Passwords don’t match‖パスワードが一致しません‖Le password non coincidono‖Las contraseñas no coinciden‖As senhas não coincidem
+Mot de passe modifié : connecte-toi‖Password changed: sign in‖パスワードを変更しました。ログインしてください‖Password cambiata: accedi‖Contraseña cambiada: inicia sesión‖Senha alterada: entre
+Choisis un nouveau mot de passe (6 caractères min.).‖Choose a new password (6 characters min).‖新しいパスワードを選んでください（6文字以上）。‖Scegli una nuova password (min. 6 caratteri).‖Elige una nueva contraseña (mínimo 6 caracteres).‖Escolha uma nova senha (mínimo 6 caracteres).
+E-mail‖Email‖メールアドレス‖E-mail‖Correo electrónico‖E-mail
 Mot de passe‖Password‖パスワード‖Password‖Contraseña‖Senha
 Se connecter‖Sign in‖ログイン‖Accedi‖Iniciar sesión‖Entrar
 Créer un compte‖Create account‖アカウント作成‖Crea account‖Crear cuenta‖Criar conta
