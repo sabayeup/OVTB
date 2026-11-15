@@ -224,7 +224,7 @@ body[data-theme="bloodborne"]::before{background-image:linear-gradient(rgba(0,0,
 header>.brand{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.head-actions{flex:none}
 .iconbtn svg{display:block;margin:auto}
 body[data-theme] .iconbtn.on{border-color:var(--accent);color:var(--accent)}
-.i-desk{display:none}body.mobile .i-phone{display:none}body.mobile .i-desk{display:block}
+.i-phone{display:none}body.mobile .i-phone{display:block}body.mobile .i-desk{display:none}
 
 /* Tâches rapides (panneau gauche) */
 #quick{position:fixed;top:0;bottom:0;left:0;width:296px;max-width:88vw;z-index:18;background:var(--panel);color:var(--text);border-right:1px solid var(--line);box-shadow:8px 0 30px #0008;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;overflow:hidden;visibility:hidden;transform:translateX(-104%);transition:transform .22s ease,visibility 0s linear .22s}
@@ -289,11 +289,56 @@ body[data-theme="solo"] .page.active>*{animation:sgPg .5s steps(1,end)}
 @keyframes sgScan{0%{opacity:1}30%{opacity:.4}50%{opacity:.9}75%{opacity:.35}100%{opacity:0}}
 @keyframes sgPg{0%{transform:translateX(-7px) skewX(2deg);filter:saturate(3.2) hue-rotate(40deg) blur(1.6px)}14%{transform:translateX(6px);filter:saturate(2.6) hue-rotate(-30deg) blur(.9px)}28%{transform:translateX(-4px) skewX(-1.5deg);filter:saturate(3.2) blur(2px)}42%{transform:translateX(3px);filter:saturate(1.9) hue-rotate(20deg)}58%{transform:translateX(-1px);filter:saturate(1.5) blur(.6px)}74%{transform:none;filter:saturate(1.2)}100%{transform:none;filter:none}}
 @media (prefers-reduced-motion:reduce){body[data-theme="solo"] .page.active::before,body[data-theme="solo"] .page.active::after{display:none}body[data-theme="solo"] .page.active>*{animation:none}}
+
+/* Série de semaines réussies */
+.streak{display:flex;gap:10px;margin-top:12px}
+.sk{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:9px 11px;background:var(--panel2)}
+.sk small{display:block;font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:800}
+.sk b{display:block;font-size:24px;font-weight:850;line-height:1.15}
+.sk-res.ok b{color:var(--good,#7dffb0)}.sk-res.ko b{color:#ff6b6b}
+body[data-theme="persona"] .sk,body[data-theme="solo"] .sk,body[data-theme="bloodborne"] .sk{border-radius:0}
+/* Multijoueur */
+.netcode{font:800 26px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.22em;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;text-align:center;user-select:all}
+#netbox .btn[disabled]{opacity:.5}
+/* Animations désactivées (Réglages) */
+body.noanim *,body.noanim *::before,body.noanim *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+body.noanim[data-theme="solo"] .page.active::before,body.noanim[data-theme="solo"] .page.active::after,body.noanim[data-theme="persona"] .page.active::before,body.noanim[data-theme="persona"] .page.active::after{display:none!important}
+
+/* Bouton animations (en-tête) */
+#animBtn .slash{display:none}body.noanim #animBtn .slash{display:block}
+/* Mobile : en-tête descendu sous la barre d'état (batterie, réseau…) + zones de clic plus grandes */
+@media(max-width:700px),(pointer:coarse){
+header{box-sizing:border-box;padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;height:auto!important;min-height:calc(68px + env(safe-area-inset-top,0px))}
+body[data-theme="persona"] header{min-height:calc(74px + env(safe-area-inset-top,0px))}
+.iconbtn{width:44px;height:44px}.head-actions{gap:6px}
+.trsw{min-height:34px;padding:5px 12px 5px 6px}
+#quick{padding-top:calc(16px + env(safe-area-inset-top,0px))}}
+body.mobile header{box-sizing:border-box;padding-top:calc(env(safe-area-inset-top,0px) + 8px)!important;height:auto!important;min-height:calc(62px + env(safe-area-inset-top,0px))}
+/* Pop-up de défi (bloquant) */
+#chOv{position:fixed;inset:0;z-index:80;display:none;overflow:auto;background:rgba(0,0,0,.74);padding:calc(18px + env(safe-area-inset-top,0px)) 16px 32px}
+#chOv.on{display:block}
+.chwrap{max-width:460px;margin:0 auto;display:grid;gap:14px}
+.chcard{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 18px 50px #000a;animation:chin .28s ease}
+@keyframes chin{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.chtag{display:inline-block;font-weight:900;font-size:11px;letter-spacing:.14em;padding:3px 10px;border-radius:6px;background:var(--accent);color:var(--ink,#fff)}
+.chfrom{margin:12px 0 8px}.chcat{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.06em;padding:3px 10px;border:1px solid var(--line);border-radius:99px;margin-bottom:10px}
+.chtext{font-size:19px;font-weight:800;line-height:1.3;margin-bottom:10px;word-break:break-word}
+body[data-theme="persona"] .chcard{background:#000;border:3px solid #fff;border-radius:0;box-shadow:8px 8px 0 var(--accent);transform:rotate(-1deg)}
+body[data-theme="persona"] .chtag{border-radius:0;transform:skewX(-14deg);padding:3px 14px}
+body[data-theme="persona"] .chtext{font-size:24px;text-transform:uppercase}
+body[data-theme="persona"] .chcat{border-radius:0;border:2px solid var(--accent);color:var(--accent)}
+body[data-theme="solo"] .chcard{background:linear-gradient(180deg,#1f4fc8f5,#173ca6f8);border:1px solid #8fcaff;border-radius:3px;box-shadow:0 0 30px #5b95f0aa}
+body[data-theme="solo"] .chtag{background:transparent;border:1px solid #8fcaff;color:#cfeaff;border-radius:2px;text-shadow:0 0 8px #8fcaff}
+body[data-theme="solo"] .chcat{border-radius:2px;border-color:#8fcaff99}
+body[data-theme="bloodborne"] .chcard{background:#0e0a0b;border:1px solid #5a4630;border-left:3px solid var(--accent);border-radius:0}
+body[data-theme="bloodborne"] .chtag{background:transparent;color:#c9a66b;border:1px solid #5a4630;border-radius:0}
+body[data-theme="bloodborne"] .chcat{border-radius:0;border-color:#5a4630}
+body[data-theme="sao"] .chcard{background:#f8fbfe;border:1px solid #9bd3ff;box-shadow:0 10px 40px rgba(60,140,220,.4)}
 </style>
 </head>
 <body data-theme="persona">
 <div class="app">
-<header><span class="trslot"></span><div class="brand">OVTB<span> / </span>SOCIAL PLAYER SYSTEM</div><div class="head-actions"><button class="iconbtn" id="mobBtn" title="Version mobile" aria-pressed="false" onclick="toggleMobile()"><svg class="i-phone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg><svg class="i-desk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button class="iconbtn" title="Notifications" onclick="showToast('Aucune nouvelle notification')">♧</button><button class="iconbtn" title="Paramètres" onclick="go('settings')">⚙</button></div></header>
+<header><span class="trslot"></span><div class="brand">OVTB<span> / </span>SOCIAL PLAYER SYSTEM</div><div class="head-actions"><button class="iconbtn on" id="animBtn" title="Animations" aria-pressed="true" onclick="setAnim(S.anim===false)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path class="slash" d="M4 20L20 4"/></svg></button><button class="iconbtn" id="mobBtn" title="Version mobile" aria-pressed="false" onclick="toggleMobile()"><svg class="i-phone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg><svg class="i-desk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button class="iconbtn" title="Notifications" onclick="showToast('Aucune nouvelle notification')">♧</button><button class="iconbtn" title="Paramètres" onclick="go('settings')">⚙</button></div></header>
 <main>
 <section id="home" class="page active"></section>
 <section id="skills" class="page"></section>
@@ -353,9 +398,9 @@ document.getElementById('radar').innerHTML=g}
 const $=id=>document.getElementById(id);
 const KEY='ovtbState_v1',PTS={'Facile':1,'Moyenne':3,'Difficile':5,'Très difficile':10},TYPES={weekly:'Hebdomadaire',once:'Ponctuelle',goal:'Objectif'};
 const TZS=['Asia/Tokyo','Asia/Seoul','Asia/Shanghai','Asia/Dubai','Europe/London','Europe/Paris','Europe/Moscow','Africa/Casablanca','America/New_York','America/Chicago','America/Los_Angeles','America/Toronto','Australia/Sydney','Pacific/Auckland'];
-const def=()=>({tz:'Asia/Tokyo',profile:{name:'',desc:'',photo:null},cats:['Force','Intelligence','Social','Catégorie 4','Catégorie 5'].map((n,i)=>({id:'c'+i,name:n,pts:0,pub:false})),missions:[],goals:[],history:[],week:null,notif:[true,true,true,true],todos:[],todoOpen:false,force:{h:null,w:null,age:null,act:'sed',actTxt:'',goal:'none',target:null,paths:['air'],done:{}},lang:'fr',bi:{on:false,lang:'en'},tl:0,cur:{cat:'c0',goal:null,filter:'all'}});
+const def=()=>({tz:'Asia/Tokyo',profile:{name:'',desc:'',photo:null},cats:['Force','Intelligence','Social','Catégorie 4','Catégorie 5'].map((n,i)=>({id:'c'+i,name:n,pts:0,pub:false})),missions:[],goals:[],history:[],week:null,notif:[true,true,true,true],todos:[],todoOpen:false,anim:true,bestStreak:0,net:{gid:null,share:true,pend:[]},force:{h:null,w:null,age:null,act:'sed',actTxt:'',goal:'none',target:null,paths:['air'],done:{}},lang:'fr',bi:{on:false,lang:'en'},tl:0,cur:{cat:'c0',goal:null,filter:'all'}});
 let S;try{S=Object.assign(def(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){S=def()}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){showToast('Stockage plein : exporte tes données')}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){showToast('Stockage plein : exporte tes données')}netDirty()};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cat=id=>S.cats.find(c=>c.id===id);
@@ -402,17 +447,17 @@ function leftMs(){const t=tp();return((7-t.di)*86400-(t.h*3600+t.m*60+t.s))*1000
 const dateStr=()=>new Date().toLocaleDateString(LOC[S.lang||'fr'],{timeZone:S.tz,weekday:'long',day:'numeric',month:'long'}).toUpperCase();
 function wpct(){const w=S.missions.filter(m=>m.type==='weekly'),t=w.reduce((a,m)=>a+m.pts,0);return t?Math.round(w.reduce((a,m)=>a+m.pts*Math.min(1,m.done/m.target),0)/t*100):0}
 const wpts=()=>S.missions.filter(m=>m.type==='weekly'&&m.done>=m.target).reduce((a,m)=>a+m.pts,0);
-function rollover(){const k=weekKey();if(S.week===k)return;if(S.week){const w=S.missions.filter(m=>m.type==='weekly');S.history.unshift({week:S.week,pct:wpct(),done:w.filter(m=>m.done>=m.target).length,total:w.length,pts:wpts()});S.history=S.history.slice(0,80);w.forEach(m=>{m.done=0;m.day=null})}(S.todos||[]).forEach(t=>{if(t.kind==='weekly')t.done=false});S.week=k;save()}
-function tick(){const e=$('countdown');if(!e)return;const ms=leftMs();e.textContent=Math.floor(ms/864e5)+'j '+Math.floor(ms%864e5/36e5)+'h '+Math.floor(ms%36e5/6e4)+'min'}
+function rollover(){const k=weekKey();if(S.week===k)return;if(S.week){const w=S.missions.filter(m=>m.type==='weekly');S.history.unshift({week:S.week,pct:wpct(),done:w.filter(m=>m.done>=m.target).length,total:w.length,pts:wpts()});S.history=S.history.slice(0,80);S.bestStreak=Math.max(S.bestStreak||0,streakInfo().best);netWeekFinal(S.week,S.history[0].pct,S.history[0].pts);w.forEach(m=>{m.done=0;m.day=null})}(S.todos||[]).forEach(t=>{if(t.kind==='weekly')t.done=false});S.week=k;save()}
+function tick(){const e=$('countdown');if(!e)return;const ms=leftMs();e.textContent=Math.floor(ms/864e5)+'j '+Math.floor(ms%864e5/36e5)+'h '+Math.floor(ms%36e5/6e4)+'min';paintStreak()}
 /* navigation */
 const R={home:()=>renderHome(),skills:()=>renderSkills(),missions:()=>renderMissions(),players:()=>renderPlayers(),events:()=>renderEvents(),settings:()=>renderSettings()};
-function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===p));R[p]();window.scrollTo({top:0,behavior:'smooth'})}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===p));R[p]();window.scrollTo({top:0,behavior:S.anim===false?'auto':'smooth'})}
 function renderAll(){R[document.querySelector('.page.active').id]()}
 /* accueil */
 function renderHome(){const mx=Math.max(20,...S.cats.map(c=>c.pts)),rm=Math.max(2,Math.ceil(Math.max(...S.cats.map(mast))-1e-9)),p=wpct(),has=S.missions.some(m=>m.type==='weekly'),pr=S.profile;
 $('home').innerHTML=`<div class="eyebrow">${esc(dateStr())}</div><h1>${esc(pr.name||'Bienvenue')}</h1>
 <div class="grid homegrid"><div class="card"><div class="row"><div class="profilepic">${pr.photo?`<img alt="" src="${pr.photo}">`:'<span class="avatar-placeholder">＋</span>'}</div><div class="grow"><div class="tag">PROFIL</div><div class="profile-name">${esc(pr.name||'Ton pseudo')}</div><p>${esc((S.bi.on&&S.tl&&pr.trd)||pr.desc||'Ajoute pseudo, description et photo dans Réglages.')}</p>${forceBadges()}</div><button class="iconbtn" onclick="go('settings')">✎</button></div><div style="height:18px"></div><div class="eyebrow">STATISTIQUES GÉNÉRALES<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('stats')">i</button></div><div class="statwrap"><svg class="radar" id="radar" viewBox="-45 0 390 270" role="img" aria-label="Radar des statistiques"></svg><div class="statlist">${S.cats.map(c=>`<div><div class="statrow"><span>${esc(tx(c,'name'))}</span><b>${fmt(mast(c))}</b></div><div class="bar"><i style="width:${Math.min(100,mast(c)/rm*100)}%"></i></div><p class="small" style="margin:3px 0 0">Effort · ${c.pts} pts</p></div>`).join('')}<p class="small" style="margin-top:4px">Forme pleine = maîtrise (niveaux d’objectifs) · pointillés = effort (missions)</p></div></div></div>
-<div class="grid"><div class="card"><div class="eyebrow">OBJECTIF HEBDOMADAIRE<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('week')">i</button></div><div class="big-number">${has?p+' %':'—'}<span style="font-size:16px;color:var(--muted)"> / 80 % requis</span></div><div class="progress"><i style="width:${p}%"></i></div><p class="small">${has?(p>=80?'Objectif de la semaine atteint.':'Encore '+(80-p)+' % pour atteindre ton objectif.'):'Crée des missions hebdomadaires pour suivre ta semaine.'}</p></div><div class="card"><div class="eyebrow">FIN DU CYCLE</div><div class="big-number" id="countdown"></div><p>Dimanche 23 h 59 · ${esc(S.tz)}</p></div></div></div>
+<div class="grid"><div class="card"><div class="eyebrow">OBJECTIF HEBDOMADAIRE<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('week')">i</button></div><div class="big-number">${has?p+' %':'—'}<span style="font-size:16px;color:var(--muted)"> / 80 % requis</span></div><div class="progress"><i style="width:${p}%"></i></div><p class="small">${has?(p>=80?'Objectif de la semaine atteint.':'Encore '+(80-p)+' % pour atteindre ton objectif.'):'Crée des missions hebdomadaires pour suivre ta semaine.'}</p></div><div class="card"><div class="eyebrow">FIN DU CYCLE</div><div class="big-number" id="countdown"></div><p>Dimanche 23 h 59 · ${esc(S.tz)}</p><div class="streak" id="streak"></div><p class="small">Semaines réussies à la suite. Remise à 0 après un échec.</p></div></div></div>
 <div class="actions"><button class="action" onclick="go('skills')"><span class="sym">⌘</span><b>Compétences</b><span class="small muted">Arbres & objectifs</span></button><button class="action" onclick="go('missions')"><span class="sym">☷</span><b>Missions</b><span class="small muted">Suivre la semaine</span></button><button class="action" onclick="go('players')"><span class="sym">♙</span><b>Joueurs</b><span class="small muted">Classement</span></button><button class="action" onclick="go('events')"><span class="sym">✧</span><b>Événements</b><span class="small muted">Défis du groupe</span></button></div>`;
 renderRadar(S.cats.map(c=>[tx(c,'name'),Math.min(100,mast(c)/rm*100)]),S.cats.map(c=>Math.min(100,c.pts/mx*100)));tick()}
 /* compétences */
@@ -442,8 +487,12 @@ function mSteps(v){const g=S.goals.find(x=>x.id===$('mGo').value);$('mSt').inner
 function saveMission(id){const [ta,tb]=g2('mN'),[da,db]=g2('mD'),t=ta||tb,ty=$('mT').value;if(!t){showToast('Ajoute un nom de mission');return}if(ty==='weekly'&&$('mFr').value==='days'&&!getDays('mDy').length){showToast('Choisis au moins un jour');return}if(ty==='goal'&&!S.goals.length){showToast('Crée d’abord un objectif');return}let m=S.missions.find(x=>x.id===id);if(!m){m={id:uid(),done:0};S.missions.unshift(m)}const dy=ty==='weekly'&&$('mFr').value==='daily',ds=ty==='weekly'&&$('mFr').value==='days',dd=ds?getDays('mDy'):[],mode=dy||ds?'count':$('mM').value;Object.assign(m,{title:t,desc:$('mD').value.trim(),cat:$('mC').value,type:ty,diff:$('mDf').value,pts:PTS[$('mDf').value],mode,freq:dy?'daily':ds?'days':'week',target:ds?dd.length:mode==='count'?Math.max(1,Math.min(dy?7:9999,+$('mTv').value||1)):1});if(!dy&&!ds)delete m.day;if(ds)m.days=dd;else delete m.days;if((dy||ds)&&$('mBy').value)m.by=$('mBy').value;else delete m.by;setTx(m,'title',ta,tb);setTx(m,'desc',da,db);if(ty==='goal'){m.goalId=$('mGo').value;m.stepIdx=+$('mSt').value}else{delete m.goalId;delete m.stepIdx}m.done=Math.min(m.done,m.target);save();closeModal();renderAll();showToast(id?'Mission modifiée':'Mission créée')}
 function delMission(id){S.missions=S.missions.filter(m=>m.id!==id);save();closeModal();renderAll()}
 /* joueurs, événements */
-function renderPlayers(){const pr=S.profile;$('players').innerHTML=`<div class="eyebrow">TON GROUPE</div><h1>Joueurs<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('players')">i</button></h1><div class="card"><div class="row between"><div><div class="eyebrow">CLASSEMENT HEBDOMADAIRE</div><h2>Semaine en cours</h2></div><span class="pill accent">RESET LUNDI</span></div><div class="list"><div class="item"><b style="color:var(--accent);width:24px">#1</b><div class="profilepic" style="width:38px;height:38px;border-radius:12px">${pr.photo?`<img alt="" src="${pr.photo}">`:'♙'}</div><div class="grow"><b>${esc(pr.name||'Toi')}</b><p>${wpct()} % de l’objectif</p></div><b>${wpts()} pts</b></div></div><div class="notice" style="margin-top:12px">Les autres membres apparaîtront ici quand le groupe sera connecté en ligne.</div></div><div class="card" style="margin-top:14px"><h2>Historique des semaines</h2><div class="list">${S.history.map(h=>`<div class="item"><div class="grow"><b>Semaine du ${esc(h.week)}</b><p>${h.done}/${h.total} missions · ${h.pts} pts</p></div><b style="color:${h.pct>=80?'var(--good)':'var(--muted)'}">${h.pct} %</b></div>`).join('')||'<p>Aucune semaine terminée pour le moment.</p>'}</div></div>`}
-function renderEvents(){$('events').innerHTML=`<div class="eyebrow">DÉFIS COLLECTIFS</div><h1>Événements<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('events')">i</button></h1><div class="card"><h2>Aucun événement actif</h2><p>L’hôte du groupe pourra lancer un événement (nom, dates, missions). Disponible quand le groupe sera connecté en ligne.</p></div>`}
+function renderPlayers(){const pr=S.profile,on=!!(NET.user&&NET.gid),cw=curWeek(),g=NET.groups.find(x=>x.id===NET.gid);
+if(on&&Date.now()-(NET.lt||0)>15000)netLoad();
+let rows=on&&NET.members.length?NET.members.map(m=>{const me=m.user_id===NET.user.id,w=NET.weekly.find(x=>x.user_id===m.user_id&&x.week===cw),st=NET.states[m.user_id],d=st&&st.data||{};return{uid:m.user_id,name:netName(m.user_id),pct:me?wpct():+(w&&w.pct||0),pts:me?wpts():+(w&&w.pts||0),photo:me?pr.photo:safeImg(d.photo),host:m.role==='host'}}):[{uid:null,name:(pr.name||'').trim()||'Toi',pct:wpct(),pts:wpts(),photo:pr.photo}];
+rows.sort((a,b)=>b.pts-a.pts||b.pct-a.pct||a.name.localeCompare(b.name));
+$('players').innerHTML=`<div class="eyebrow">TON GROUPE</div><h1>Joueurs<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('players')">i</button></h1>${on&&g?`<p class="small" style="margin:-6px 0 14px">Groupe « ${esc(g.name)} » · ${NET.members.length} membre${NET.members.length>1?'s':''}</p>`:''}<div class="card"><div class="row between"><div><div class="eyebrow">CLASSEMENT HEBDOMADAIRE</div><h2>Semaine en cours</h2></div><span class="pill accent">RESET LUNDI</span></div><div class="list">${rows.map((r,i)=>`<div class="item" ${r.uid?`style="cursor:pointer" onclick="netProfile('${r.uid}')"`:''}><b style="color:var(--accent);width:24px">#${i+1}</b><div class="profilepic" style="width:38px;height:38px;border-radius:12px">${r.photo?`<img alt="" src="${esc(r.photo)}">`:'♙'}</div><div class="grow"><b>${esc(r.name)}</b>${r.host?' <span class="pill">Hôte</span>':''}<p>${r.pct} % de l’objectif</p></div><b>${r.pts} pts</b></div>`).join('')}</div>${on?'':`<div class="notice" style="margin-top:12px">Connecte-toi et rejoins un groupe dans Réglages pour voir les autres joueurs.</div><button class="btn secondary" style="margin-top:10px" onclick="go('settings')">Ouvrir les réglages</button>`}</div>${on?chCards()+groupHist():''}<div class="card" style="margin-top:14px"><h2>Historique des semaines</h2><div class="list">${S.history.map(h=>`<div class="item"><div class="grow"><b>Semaine du ${esc(h.week)}</b><p>${h.done}/${h.total} missions · ${h.pts} pts</p></div><b style="color:${h.pct>=80?'var(--good)':'var(--muted)'}">${h.pct} %</b></div>`).join('')||'<p>Aucune semaine terminée pour le moment.</p>'}</div></div>`}
+function renderEvents(){$('events').innerHTML=`<div class="eyebrow">DÉFIS COLLECTIFS</div><h1>Événements<button class="info" type="button" aria-label="À quoi sert cette section" onclick="info('events')">i</button></h1><div class="card"><h2>Aucun événement actif</h2><p>L’hôte du groupe pourra lancer un événement (nom, dates, missions). Bientôt disponible.</p></div>`}
 /* réglages */
 function setPhoto(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),k=Math.min(1,256/Math.max(im.width,im.height));c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.profile.photo=c.toDataURL('image/jpeg',.82);save();showToast('Photo enregistrée')};im.src=r.result};r.readAsDataURL(f)}
 function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='ovtb-sauvegarde.json';a.click()}
@@ -451,7 +500,7 @@ function importData(inp){const f=inp.files[0];if(!f)return;const r=new FileReade
 function resetData(){if(confirm('Tout effacer sur cet appareil ?')){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}}
 function renderSettings(){const z=[...new Set([S.tz,Intl.DateTimeFormat().resolvedOptions().timeZone,...TZS])];
 $('setA').innerHTML=`<div class="card fields"><h2>Profil</h2><div class="field"><label>Pseudonyme</label><input value="${esc(S.profile.name)}" maxlength="24" oninput="S.profile.name=this.value;save()"></div><div class="field"><label>Description courte</label><textarea oninput="descIn(this.value)">${esc(S.bi.on&&S.tl?S.profile.trd||'':S.profile.desc)}</textarea></div><div class="field"><label>Photo de profil</label><input type="file" accept="image/*" onchange="setPhoto(this)"></div></div><div class="card fields" style="margin-top:14px"><h2>Catégories</h2><p>Force, Intelligence, Social et la catégorie 4 sont permanentes, mais tu peux toutes les renommer. La 5ᵉ est facultative (4 minimum, 5 maximum). Les statistiques sont conservées.</p>${S.cats.map((c,i)=>`<div class="field"><label>Catégorie ${i+1}</label><div class="row"><input style="flex:1;min-width:0;width:auto" value="${esc(i===0?trTo('Force',S.bi.on&&S.tl?S.bi.lang:(S.lang||'fr')):S.bi.on&&S.tl?(c.tr&&c.tr.name)||'':c.name)}" ${i===0?'readonly':''} maxlength="18" aria-label="Nom de la catégorie ${i+1}" oninput="catName(${i},this.value)">${c.id==='c4'?`<button class="btn secondary" onclick="delCat5()">Supprimer</button>`:''}</div></div>`).join('')}${S.cats.length<5?`<button class="btn secondary" style="justify-self:start" onclick="addCat5()">＋ Ajouter une 5ᵉ catégorie</button>`:''}</div><div class="card fields" style="margin-top:14px"><h2>Créneau horaire</h2><p>Ta semaine se termine le dimanche à 23 h 59 dans ce fuseau.</p><div class="field"><select onchange="S.tz=this.value;S.week=null;rollover()">${z.map(t=>`<option ${t===S.tz?'selected':''}>${esc(t)}</option>`).join('')}</select></div></div><div class="card fields" style="margin-top:14px"><h2>Langue de l’interface</h2><div class="field"><select aria-label="Langue de l’interface" onchange="setLang(this.value)">${Object.entries(LN).map(([k,l])=>`<option value="${k}" ${k===(S.lang||'fr')?'selected':''}>${l}</option>`).join('')}</select></div></div><div class="card fields" style="margin-top:14px"><h2>Textes bilingues</h2><p>Écris ta traduction à côté de tes textes pour étudier une langue. Un petit interrupteur en haut à gauche bascule entre l’original et la traduction.</p><div class="item"><div class="grow"><b>Activer</b></div><input type="checkbox" aria-label="Activer les textes bilingues" ${S.bi.on?'checked':''} onchange="S.bi.on=this.checked;if(!this.checked)S.tl=0;save();paintSw();renderAll()"></div><div class="field"><label>Langue étudiée</label><select onchange="S.bi.lang=this.value;save();paintSw()">${[['en','English'],['ja','日本語'],['it','Italiano'],['es','Español'],['pt','Português (Brasil)'],['fr','Français']].map(([k,l])=>`<option value="${k}" ${k===S.bi.lang?'selected':''}>${l}</option>`).join('')}</select></div></div>`;
-$('setB').innerHTML=`<div class="card" style="margin-top:14px"><h2>Confidentialité par catégorie</h2><p>Privé par défaut. Rends une catégorie visible aux autres joueurs.</p><div class="list" style="margin-top:12px">${S.cats.map((c,i)=>`<div class="item"><div class="grow"><b>${esc(tx(c,'name'))}</b><p>Missions, objectifs et arbre</p></div><label class="small"><input type="checkbox" ${c.pub?'checked':''} onchange="S.cats[${i}].pub=this.checked;save()"> Public</label></div>`).join('')}</div></div><div class="card" style="margin-top:14px"><h2>Notifications</h2><div class="list">${['Validation ou refus d’une compétence','Progression et échéance des missions','Nouvel événement lancé','Résultats et classement hebdomadaire'].map((x,i)=>`<div class="item"><div class="grow"><b>${x}</b></div><input type="checkbox" ${S.notif[i]?'checked':''} aria-label="${x}" onchange="S.notif[${i}]=this.checked;save()"></div>`).join('')}</div></div><div class="card" style="margin-top:14px"><h2>Groupe & invitations</h2><p>Lien et code d’accès disponibles quand le groupe sera connecté en ligne.</p></div><div class="card" style="margin-top:14px"><h2>Données de cet appareil</h2><p>Sauvegarde ou restaure ta progression.</p><div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Exporter</button><label class="btn secondary">Importer<input type="file" accept="application/json" hidden onchange="importData(this)"></label><button class="btn secondary" onclick="resetData()">Tout effacer</button></div></div>`}
+$('setB').innerHTML=`<div class="card" style="margin-top:14px"><h2>Confidentialité par catégorie</h2><p>Privé par défaut. Rends une catégorie visible aux autres joueurs.</p><div class="list" style="margin-top:12px">${S.cats.map((c,i)=>`<div class="item"><div class="grow"><b>${esc(tx(c,'name'))}</b><p>Missions, objectifs et arbre</p></div><label class="small"><input type="checkbox" ${c.pub?'checked':''} onchange="S.cats[${i}].pub=this.checked;save()"> Public</label></div>`).join('')}</div></div><div class="card" style="margin-top:14px"><h2>Notifications</h2><div class="list">${['Validation ou refus d’une compétence','Progression et échéance des missions','Nouvel événement lancé','Résultats et classement hebdomadaire'].map((x,i)=>`<div class="item"><div class="grow"><b>${x}</b></div><input type="checkbox" ${S.notif[i]?'checked':''} aria-label="${x}" onchange="S.notif[${i}]=this.checked;save()"></div>`).join('')}</div></div><div class="card fields" style="margin-top:14px" id="netbox">${netHtml()}</div><div class="card" style="margin-top:14px"><h2>Animations</h2><p>Désactive les effets animés (glitch, transitions) pour un affichage plus sobre.</p><label class="small" style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" ${S.anim!==false?'checked':''} onchange="setAnim(this.checked)"> Activer les animations</label></div><div class="card" style="margin-top:14px"><h2>Données de cet appareil</h2><p>Sauvegarde ou restaure ta progression.</p><div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn secondary" onclick="exportData()">Exporter</button><label class="btn secondary">Importer<input type="file" accept="application/json" hidden onchange="importData(this)"></label><button class="btn secondary" onclick="resetData()">Tout effacer</button></div></div>`}
 
 /* catégorie 5 facultative (4 minimum, 5 maximum) */
 function addCat5(){if(cat('c4')||S.cats.length>=5)return;S.cats.push({id:'c4',name:'Catégorie 5',pts:0,pub:false});save();renderSettings();showToast('Catégorie ajoutée')}
@@ -483,13 +532,13 @@ const SEL='button,[role="button"],input,select,textarea,label.btn,a[href]',PAGES
 let cur=null,prev=[],rep={},last=0;
 const ok=e=>{if(e.disabled||e.type==='hidden'||e.closest('.hidden'))return false;const r=e.getBoundingClientRect();if(r.width<4||r.height<4)return false;if(getComputedStyle(e).visibility==='hidden')return false;if(r.bottom<0||r.top>innerHeight+2000)return false;return true};
 function cands(){const m=$('modal'),root=m.classList.contains('open')?m:document;let l=[...root.querySelectorAll(SEL)].filter(ok);if(!m.classList.contains('open')&&!document.body.classList.contains('qopen'))l=l.filter(e=>!e.closest('#quick')&&e.id!=='qback');if(!m.classList.contains('open')&&document.body.classList.contains('qopen'))l=l.filter(e=>e.closest('#quick')||e.closest('.bottomnav'));return l.filter(e=>!(e.tagName==='INPUT'&&e.type==='file'&&e.hidden))}
-function setCur(e){if(cur)cur.classList.remove('gpfocus');cur=e;if(e){e.classList.add('gpfocus');e.scrollIntoView({block:'center',inline:'nearest',behavior:'smooth'})}}
+function setCur(e){if(cur)cur.classList.remove('gpfocus');cur=e;if(e){e.classList.add('gpfocus');e.scrollIntoView({block:'center',inline:'nearest',behavior:S.anim===false?'auto':'smooth'})}}
 function move(dx,dy){const l=cands();if(!l.length)return;if(!cur||!l.includes(cur)){const first=l.find(e=>{const r=e.getBoundingClientRect();return r.top>=60&&r.bottom<=innerHeight-70})||l[0];setCur(first);return}
 const a=cur.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;let best=null,bs=1e9;
 for(const e of l){if(e===cur)continue;const r=e.getBoundingClientRect(),cx=r.left+r.width/2-ax,cy=r.top+r.height/2-ay;if((dx?cx*dx:cy*dy)<=2)continue;
 let main,side;if(dx){main=dx>0?r.left-a.right:a.left-r.right;side=Math.max(0,Math.max(r.top-a.bottom,a.top-r.bottom))}else{main=dy>0?r.top-a.bottom:a.top-r.bottom;side=Math.max(0,Math.max(r.left-a.right,a.left-r.right))}
 const sc=Math.max(0,main)+side*3+Math.abs(dx?cy:cx)*.2;if(sc<bs){bs=sc;best=e}}
-if(best)setCur(best);else window.scrollBy({top:dy*160,left:dx*160,behavior:'smooth'})}
+if(best)setCur(best);else window.scrollBy({top:dy*160,left:dx*160,behavior:S.anim===false?'auto':'smooth'})}
 function press(){if(!cur)return;const e=cur;if(e.tagName==='SELECT'){const i=(e.selectedIndex+1)%e.options.length;e.selectedIndex=i;e.dispatchEvent(new Event('change',{bubbles:true}));return}
 if(e.tagName==='INPUT'&&(e.type==='text'||e.type==='number'||e.type==='search')||e.tagName==='TEXTAREA'){e.focus();return}
 if(e.tagName==='LABEL'){const i=e.querySelector('input');if(i&&i.type==='file'){i.click();return}}
@@ -761,6 +810,93 @@ Maîtriser le L-step (esquive en boxe)‖Master the L-step (boxing dodge)‖Lス
 100 jabs par jour pendant 1 mois‖100 jabs a day for 1 month‖1か月間、毎日ジャブ100回‖100 jab al giorno per 1 mese‖100 jabs al día durante 1 mes‖100 jabs por dia durante 1 mês
 100 coups de pied par jour pendant 1 mois‖100 kicks a day for 1 month‖1か月間、毎日キック100回‖100 calci al giorno per 1 mese‖100 patadas al día durante 1 mes‖100 chutes por dia durante 1 mês
 100 droite-gauche par jour pendant 1 mois‖100 right-lefts a day for 1 month‖1か月間、毎日右左100回‖100 destro-sinistro al giorno per 1 mese‖100 derecha-izquierda al día durante 1 mes‖100 direita-esquerda por dia durante 1 mês`;DICT3.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
+const DICT4=`Minimal‖Minimal‖ミニマル‖Minimale‖Minimalista‖Minimalista
+Solo / Lecteur omniscient‖Solo / Omniscient Reader‖ソロ / 全知的読者視点‖Solo / Lettore onnisciente‖Solo / Lector omnisciente‖Solo / Leitor onisciente
+Connexion au serveur en cours…‖Connecting to the server…‖サーバーに接続中…‖Connessione al server in corso…‖Conectando con el servidor…‖Conectando ao servidor…
+Serveur injoignable. Vérifie ta connexion internet puis recharge la page.‖Server unreachable. Check your internet connection, then reload the page.‖サーバーに接続できません。インターネット接続を確認して、ページを再読み込みしてください。‖Server irraggiungibile. Controlla la connessione internet e ricarica la pagina.‖Servidor inaccesible. Comprueba tu conexión a internet y recarga la página.‖Servidor inacessível. Verifique sua conexão com a internet e recarregue a página.
+Connecte-toi pour jouer en groupe : classement hebdomadaire et profils partagés.‖Sign in to play with a group: weekly ranking and shared profiles.‖ログインしてグループで遊ぼう：週間ランキングとプロフィール共有。‖Accedi per giocare in gruppo: classifica settimanale e profili condivisi.‖Inicia sesión para jugar en grupo: clasificación semanal y perfiles compartidos.‖Entre para jogar em grupo: classificação semanal e perfis compartilhados.
+E-mail‖Email‖メールアドレス‖E-mail‖Correo electrónico‖E-mail
+Mot de passe (6 caractères minimum)‖Password (6 characters minimum)‖パスワード（6文字以上）‖Password (minimo 6 caratteri)‖Contraseña (mínimo 6 caracteres)‖Senha (mínimo 6 caracteres)
+Se connecter‖Sign in‖ログイン‖Accedi‖Iniciar sesión‖Entrar
+Créer un compte‖Create an account‖アカウントを作成‖Crea un account‖Crear una cuenta‖Criar uma conta
+Se déconnecter‖Sign out‖ログアウト‖Esci‖Cerrar sesión‖Sair
+Compte créé. Vérifie ta boîte mail pour confirmer ton adresse, puis connecte-toi.‖Account created. Check your inbox to confirm your address, then sign in.‖アカウントを作成しました。メールを確認してアドレスを認証し、ログインしてください。‖Account creato. Controlla la posta per confermare l’indirizzo, poi accedi.‖Cuenta creada. Revisa tu correo para confirmar tu dirección y luego inicia sesión.‖Conta criada. Confira seu e-mail para confirmar o endereço e depois entre.
+Connecté avec‖Signed in as‖ログイン中：‖Connesso come‖Sesión iniciada como‖Conectado como
+Créer un groupe‖Create a group‖グループを作成‖Crea un gruppo‖Crear un grupo‖Criar um grupo
+Nom du groupe‖Group name‖グループ名‖Nome del gruppo‖Nombre del grupo‖Nome do grupo
+Créer‖Create‖作成‖Crea‖Crear‖Criar
+Rejoindre un groupe‖Join a group‖グループに参加‖Unisciti a un gruppo‖Unirse a un grupo‖Entrar em um grupo
+Code du groupe‖Group code‖グループコード‖Codice del gruppo‖Código del grupo‖Código do grupo
+Rejoindre‖Join‖参加‖Unisciti‖Unirse‖Entrar
+Code d’invitation‖Invitation code‖招待コード‖Codice d’invito‖Código de invitación‖Código de convite
+Copier le code‖Copy code‖コードをコピー‖Copia il codice‖Copiar código‖Copiar código
+Copier le lien‖Copy link‖リンクをコピー‖Copia il link‖Copiar enlace‖Copiar link
+Code copié‖Code copied‖コードをコピーしました‖Codice copiato‖Código copiado‖Código copiado
+Lien copié‖Link copied‖リンクをコピーしました‖Link copiato‖Enlace copiado‖Link copiado
+Membres‖Members‖メンバー‖Membri‖Miembros‖Membros
+Hôte‖Host‖ホスト‖Host‖Anfitrión‖Anfitrião
+Partager ma progression avec le groupe‖Share my progress with the group‖進捗をグループと共有する‖Condividi i miei progressi con il gruppo‖Compartir mi progreso con el grupo‖Compartilhar meu progresso com o grupo
+Désactivé : tes données sont retirées du groupe, tu restes membre.‖Off: your data is removed from the group, you stay a member.‖オフ：データはグループから削除されますが、メンバーのままです。‖Disattivato: i tuoi dati vengono rimossi dal gruppo, resti membro.‖Desactivado: tus datos se retiran del grupo, sigues siendo miembro.‖Desativado: seus dados são removidos do grupo, você continua membro.
+Créer ou rejoindre un autre groupe‖Create or join another group‖別のグループを作成・参加‖Crea o unisciti a un altro gruppo‖Crear o unirse a otro grupo‖Criar ou entrar em outro grupo
+Groupe actif‖Active group‖アクティブなグループ‖Gruppo attivo‖Grupo activo‖Grupo ativo
+E-mail ou mot de passe incorrect‖Wrong email or password‖メールアドレスまたはパスワードが違います‖E-mail o password errati‖Correo o contraseña incorrectos‖E-mail ou senha incorretos
+Confirme d’abord ton e-mail (lien reçu par courrier)‖Confirm your email first (link sent by mail)‖先にメールを認証してください（届いたリンク）‖Conferma prima la tua e-mail (link ricevuto)‖Confirma primero tu correo (enlace recibido)‖Confirme primeiro seu e-mail (link recebido)
+Un compte existe déjà avec cet e-mail‖An account already exists with this email‖このメールアドレスのアカウントは既に存在します‖Esiste già un account con questa e-mail‖Ya existe una cuenta con este correo‖Já existe uma conta com este e-mail
+Mot de passe trop court (6 caractères minimum)‖Password too short (6 characters minimum)‖パスワードが短すぎます（6文字以上）‖Password troppo corta (minimo 6 caratteri)‖Contraseña demasiado corta (mínimo 6 caracteres)‖Senha muito curta (mínimo 6 caracteres)
+Renseigne l’e-mail et un mot de passe de 6 caractères minimum‖Enter your email and a password of at least 6 characters‖メールアドレスと6文字以上のパスワードを入力してください‖Inserisci l’e-mail e una password di almeno 6 caratteri‖Introduce el correo y una contraseña de al menos 6 caracteres‖Informe o e-mail e uma senha de pelo menos 6 caracteres
+Donne un nom au groupe‖Give the group a name‖グループ名を入力してください‖Dai un nome al gruppo‖Pon un nombre al grupo‖Dê um nome ao grupo
+Entre le code du groupe‖Enter the group code‖グループコードを入力してください‖Inserisci il codice del gruppo‖Introduce el código del grupo‖Digite o código do grupo
+Code inconnu‖Unknown code‖不明なコードです‖Codice sconosciuto‖Código desconocido‖Código desconhecido
+Connexion requise‖Sign-in required‖ログインが必要です‖Accesso richiesto‖Inicio de sesión necesario‖Login necessário
+Groupe créé‖Group created‖グループを作成しました‖Gruppo creato‖Grupo creado‖Grupo criado
+Groupe rejoint‖Group joined‖グループに参加しました‖Gruppo unito‖Te has unido al grupo‖Você entrou no grupo
+Erreur réseau : réessaie‖Network error: try again‖ネットワークエラー：もう一度お試しください‖Errore di rete: riprova‖Error de red: inténtalo de nuevo‖Erro de rede: tente novamente
+Connecte-toi et rejoins un groupe dans Réglages pour voir les autres joueurs.‖Sign in and join a group in Settings to see the other players.‖設定でログインしてグループに参加すると、他のプレイヤーが見られます。‖Accedi e unisciti a un gruppo in Impostazioni per vedere gli altri giocatori.‖Inicia sesión y únete a un grupo en Ajustes para ver a los demás jugadores.‖Entre e participe de um grupo em Ajustes para ver os outros jogadores.
+Ouvrir les réglages‖Open settings‖設定を開く‖Apri le impostazioni‖Abrir ajustes‖Abrir ajustes
+Semaines précédentes du groupe‖Group’s previous weeks‖グループの過去の週‖Settimane precedenti del gruppo‖Semanas anteriores del grupo‖Semanas anteriores do grupo
+Aucune donnée partagée pour l’instant.‖No shared data yet.‖共有されたデータはまだありません。‖Nessun dato condiviso per ora.‖Aún no hay datos compartidos.‖Nenhum dado compartilhado por enquanto.
+Toi‖You‖あなた‖Tu‖Tú‖Você
+Série en cours‖Current streak‖連続達成中‖Serie in corso‖Racha actual‖Sequência atual
+Record‖Best‖最高記録‖Record‖Récord‖Recorde
+Semaine passée‖Last week‖先週‖Settimana scorsa‖Semana pasada‖Semana passada
+Réussite‖Success‖成功‖Riuscita‖Éxito‖Sucesso
+Échec‖Failure‖失敗‖Fallimento‖Fracaso‖Falha
+Semaines réussies à la suite. Remise à 0 après un échec.‖Weeks passed in a row. Resets to 0 after a failure.‖連続で達成した週の数。失敗すると0に戻ります。‖Settimane riuscite di fila. Si azzera dopo un fallimento.‖Semanas superadas seguidas. Vuelve a 0 tras un fallo.‖Semanas concluídas seguidas. Volta a 0 após uma falha.
+Animations‖Animations‖アニメーション‖Animazioni‖Animaciones‖Animações
+Activer les animations‖Enable animations‖アニメーションを有効にする‖Attiva le animazioni‖Activar las animaciones‖Ativar as animações
+Désactive les effets animés (glitch, transitions) pour un affichage plus sobre.‖Turn off animated effects (glitch, transitions) for a calmer display.‖アニメーション効果（グリッチ・トランジション）をオフにして、落ち着いた表示にします。‖Disattiva gli effetti animati (glitch, transizioni) per una visualizzazione più sobria.‖Desactiva los efectos animados (glitch, transiciones) para una visualización más sobria.‖Desative os efeitos animados (glitch, transições) para uma exibição mais sóbria.
+L’hôte du groupe pourra lancer un événement (nom, dates, missions). Bientôt disponible.‖The group host will be able to start an event (name, dates, missions). Coming soon.‖グループのホストがイベント（名前・日程・ミッション）を開始できるようになります。近日公開。‖L’host del gruppo potrà avviare un evento (nome, date, missioni). Presto disponibile.‖El anfitrión del grupo podrá lanzar un evento (nombre, fechas, misiones). Próximamente.‖O anfitrião do grupo poderá iniciar um evento (nome, datas, missões). Em breve.`;DICT4.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
+const DICT5=`Défi reçu‖Challenge received‖チャレンジを受信‖Sfida ricevuta‖Reto recibido‖Desafio recebido
+Défi relevé‖Challenge completed‖チャレンジ達成‖Sfida superata‖Reto cumplido‖Desafio cumprido
+te lance un défi‖challenges you‖からチャレンジが届きました‖ti lancia una sfida‖te lanza un reto‖te lança um desafio
+a relevé ton défi‖completed your challenge‖があなたのチャレンジを達成しました‖ha superato la tua sfida‖ha cumplido tu reto‖cumpriu o seu desafio
+Récompense : +1 effort dans cette catégorie.‖Reward: +1 effort in this category.‖ごほうび：このカテゴリに努力+1。‖Premio: +1 impegno in questa categoria.‖Recompensa: +1 esfuerzo en esta categoría.‖Recompensa: +1 esforço nesta categoria.
+À accomplir avant la fin de la journée, sans conséquence en cas d’échec.‖To complete before the end of the day, no consequence if you fail.‖今日中に達成してください。失敗してもペナルティはありません。‖Da completare entro la fine della giornata, nessuna conseguenza se fallisci.‖Para cumplir antes de que acabe el día, sin consecuencias si fallas.‖Para cumprir antes do fim do dia, sem consequências se falhar.
+Accepter‖Accept‖受ける‖Accetta‖Aceptar‖Aceitar
+Refuser‖Decline‖断る‖Rifiuta‖Rechazar‖Recusar
+Défi du jour‖Challenge of the day‖今日のチャレンジ‖Sfida del giorno‖Reto del día‖Desafio do dia
+Défis en cours‖Ongoing challenges‖進行中のチャレンジ‖Sfide in corso‖Retos en curso‖Desafios em andamento
+Jusqu’à la fin de la journée‖Until the end of the day‖今日の終わりまで‖Fino a fine giornata‖Hasta el final del día‖Até o fim do dia
+Accompli‖Done‖達成‖Completata‖Cumplido‖Cumprido
+Défis envoyés‖Challenges sent‖送ったチャレンジ‖Sfide inviate‖Retos enviados‖Desafios enviados
+En attente‖Pending‖返事待ち‖In attesa‖Pendiente‖Pendente
+Accepté‖Accepted‖受諾‖Accettata‖Aceptado‖Aceito
+Refusé‖Declined‖辞退‖Rifiutata‖Rechazado‖Recusado
+Expiré‖Expired‖期限切れ‖Scaduta‖Expirado‖Expirado
+Lancer un défi‖Send a challenge‖チャレンジを送る‖Lancia una sfida‖Lanzar un reto‖Lançar um desafio
+Catégorie de l’ami‖Friend’s category‖友達のカテゴリ‖Categoria dell’amico‖Categoría del amigo‖Categoria do amigo
+Ton défi‖Your challenge‖チャレンジの内容‖La tua sfida‖Tu reto‖Seu desafio
+Ex. 20 pompes avant ce soir‖e.g. 20 push-ups before tonight‖例：今夜までに腕立て20回‖Es. 20 flessioni entro stasera‖Ej. 20 flexiones antes de esta noche‖Ex. 20 flexões até esta noite
+Petite récompense : +1 effort dans la catégorie choisie.‖Small reward: +1 effort in the chosen category.‖ささやかなごほうび：選んだカテゴリに努力+1。‖Piccolo premio: +1 impegno nella categoria scelta.‖Pequeña recompensa: +1 esfuerzo en la categoría elegida.‖Pequena recompensa: +1 esforço na categoria escolhida.
+Envoyer le défi‖Send challenge‖チャレンジを送信‖Invia la sfida‖Enviar el reto‖Enviar o desafio
+Un défi est déjà en attente de réponse.‖A challenge is already waiting for an answer.‖返事待ちのチャレンジがすでにあります。‖Una sfida è già in attesa di risposta.‖Ya hay un reto pendiente de respuesta.‖Já há um desafio aguardando resposta.
+Défi envoyé‖Challenge sent‖チャレンジを送りました‖Sfida inviata‖Reto enviado‖Desafio enviado
+Défi accepté‖Challenge accepted‖チャレンジを受けました‖Sfida accettata‖Reto aceptado‖Desafio aceito
+Défi refusé‖Challenge declined‖チャレンジを断りました‖Sfida rifiutata‖Reto rechazado‖Desafio recusado
+Défi accompli · +1 effort‖Challenge done · +1 effort‖チャレンジ達成 · 努力+1‖Sfida superata · +1 impegno‖Reto cumplido · +1 esfuerzo‖Desafio cumprido · +1 esforço
+Défi expiré‖Challenge expired‖チャレンジの期限が切れました‖Sfida scaduta‖Reto expirado‖Desafio expirado
+Écris le défi‖Write the challenge‖チャレンジの内容を書いてください‖Scrivi la sfida‖Escribe el reto‖Escreva o desafio
+Animations‖Animations‖アニメーション‖Animazioni‖Animaciones‖Animações`;DICT5.split('\n').forEach(r=>{const a=r.split('‖');DICT[a[0]]={en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}});
 const trTo=(fr,L)=>{const e=DICT[fr];return e&&e[L]?e[L]:fr},F=fr=>S.bi.on&&S.tl&&S.bi.lang!=='fr'?trTo(fr,S.bi.lang):fr;
 const DICTL={};Object.keys(DICT).forEach(k=>DICTL[k.toLowerCase()]=DICT[k]);
 const UN={en:['d','h','min'],ja:['日','時間','分'],it:['g','h','min'],es:['d','h','min'],pt:['d','h','min']};
@@ -783,7 +919,12 @@ Mission terminée · \+(\d+) effort‖Mission done · +$1 effort‖ミッショ�
 (Facile|Moyenne|Difficile|Très difficile) \(\+(\d+)\)‖@1 (+$2)‖@1 (+$2)‖@1 (+$2)‖@1 (+$2)‖@1 (+$2)
 Catégorie (\d)‖Category $1‖カテゴリ$1‖Categoria $1‖Categoría $1‖Categoria $1
 Nom de la catégorie (\d)‖Name of category $1‖カテゴリ$1の名前‖Nome della categoria $1‖Nombre de la categoría $1‖Nome da categoria $1
-Supprimer « (.+?) » \?([\s\S]*)‖Delete “$1”?$2‖「$1」を削除しますか？$2‖Eliminare «$1»?$2‖¿Eliminar «$1»?$2‖Excluir “$1”?$2`.split('\n').map(r=>{const a=r.split('‖');return[new RegExp('^'+a[0]+'$','i'),{en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}]});
+Supprimer « (.+?) » \?([\s\S]*)‖Delete “$1”?$2‖「$1」を削除しますか？$2‖Eliminare «$1»?$2‖¿Eliminar «$1»?$2‖Excluir “$1”?$2
+(\d+) membres?‖$1 member(s)‖メンバー$1人‖$1 membro/i‖$1 miembro(s)‖$1 membro(s)
+(\d+) catégorie privée‖$1 private category‖非公開カテゴリ$1件‖$1 categoria privata‖$1 categoría privada‖$1 categoria privada
+(\d+) catégories privées‖$1 private categories‖非公開カテゴリ$1件‖$1 categorie private‖$1 categorías privadas‖$1 categorias privadas
+Groupe « (.+?) »‖Group “$1”‖グループ「$1」‖Gruppo «$1»‖Grupo «$1»‖Grupo “$1”
+Joueur (\w+)‖Player $1‖プレイヤー$1‖Giocatore $1‖Jugador $1‖Jogador $1`.split('\n').map(r=>{const a=r.split('‖');return[new RegExp('^'+a[0]+'$','i'),{en:a[1],ja:a[2],it:a[3],es:a[4],pt:a[5]}]});
 const _cf=window.confirm.bind(window);window.confirm=m=>_cf(trOut(String(m)));
 function trOut(full){const k=full.trim(),L=S.lang||'fr';if(L==='fr'||!k)return full;
 const e=DICT[k]||DICTL[k.toLowerCase()];
@@ -800,7 +941,150 @@ function setLang(l){S.lang=l;save();document.documentElement.lang=l;if($('qdays'
 function startTr(){document.documentElement.lang=S.lang||'fr';new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='characterData')trNode(m.target);else m.addedNodes.forEach(n=>{if(n.nodeType===3)trNode(n);else if(n.nodeType===1)trWalk(n)})})).observe(document.body,{childList:true,subtree:true,characterData:true});if((S.lang||'fr')!=='fr')trWalk(document.body)}
 function catName(i,v){if(i===0)return;const c=S.cats[i];v=v.trim();if(S.bi.on&&S.tl){if(v){(c.tr=c.tr||{}).name=v}else if(c.tr)delete c.tr.name}else c.name=v||'Catégorie '+(i+1);save()}
 function descIn(v){if(S.bi.on&&S.tl)S.profile.trd=v;else S.profile.desc=v;save()}
-rollover();renderHome();paintMobile();paintQuick();startTr();
+
+/* ===== Animations (Réglages) ===== */
+function paintAnim(){const on=S.anim!==false;document.body.classList.toggle('noanim',!on);const b=$('animBtn');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)}const c=document.querySelector('#settings input[onchange^="setAnim"]');if(c)c.checked=on}
+function setAnim(on){S.anim=!!on;save();paintAnim()}
+/* ===== Série de semaines réussies (≥ 80 %), remise à 0 au premier échec ===== */
+function prevWeek(d){const x=new Date(d+'T00:00:00Z');x.setUTCDate(x.getUTCDate()-7);return x.toISOString().slice(0,10)}
+function streakInfo(){const H=S.history||[],ok=h=>h.total>0&&h.pct>=80;let cur=0,exp=prevWeek(S.week||weekKey());
+for(const h of H){if(h.week!==exp||!ok(h))break;cur++;exp=prevWeek(exp)}
+let best=0,run=0,lw=null;[...H].reverse().forEach(h=>{if(!ok(h)){run=0;lw=null;return}run=(lw&&prevWeek(h.week)===lw)?run+1:1;lw=h.week;best=Math.max(best,run)});
+return{cur,best:Math.max(best,S.bestStreak||0)}}
+function paintStreak(){const el=$('streak');if(!el)return;const st=streakInfo(),t=tp(),last=(S.history||[])[0];
+const res=t.di===0&&t.h<10&&last&&last.week===prevWeek(S.week||weekKey())&&last.total>0;let h;
+if(res){const k=last.pct>=80;h=`<div class="sk sk-res ${k?'ok':'ko'}"><small>SEMAINE PASSÉE</small><b>${k?'RÉUSSITE':'ÉCHEC'}</b></div>`}
+else h=`<div class="sk"><small>SÉRIE EN COURS</small><b>${st.cur}</b></div>`;
+h+=`<div class="sk"><small>RECORD</small><b>${st.best}</b></div>`;if(el.__h!==h){el.__h=h;el.innerHTML=h}}
+/* ===== Multijoueur : Supabase (comptes, groupes, classement en direct) ===== */
+const SB_URL='https://zasyyklvsznkmkwcdmli.supabase.co',SB_KEY='sb_publishable_NORcxbV1mOpuWYAN9K4rIQ_i2P_qKQ6';
+const NET={sb:null,user:null,status:'loading',groups:[],gid:null,members:[],states:{},weekly:[],err:'',msg:'',busy:false,more:false,ch:null,last:'',timer:null,pre:null,lt:0};
+const nsv=()=>{S.net=Object.assign({gid:null,share:true,pend:[]},S.net||{});if(!Array.isArray(S.net.pend))S.net.pend=[];return S.net};
+const curWeek=()=>S.week||weekKey();
+const safeImg=s=>typeof s==='string'&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s)?s:null;
+const netName=uid=>{if(NET.user&&uid===NET.user.id)return(S.profile.name||'').trim()||'Toi';const st=NET.states[uid];return(st&&st.pseudo)||'Joueur '+String(uid).slice(0,4)};
+function netErr(m){m=String(m||'');const M=[['Invalid login','E-mail ou mot de passe incorrect'],['Email not confirmed','Confirme d’abord ton e-mail (lien reçu par courrier)'],['already registered','Un compte existe déjà avec cet e-mail'],['at least 6','Mot de passe trop court (6 caractères minimum)'],['Failed to fetch','Erreur réseau : réessaie'],['NetworkError','Erreur réseau : réessaie']];for(const[a,b]of M)if(m.includes(a))return b;return m}
+function netInit(){const h=location.hash.match(/join=([A-Za-z0-9]{4,10})/i);if(h){NET.pre=h[1].toUpperCase();NET.more=true}
+setInterval(()=>{if(NET.gid&&NET.user&&document.visibilityState==='visible')netLoad()},60000);
+const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
+s.onload=()=>{try{NET.sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'ovtb-auth'}});
+NET.sb.auth.onAuthStateChange((ev,ses)=>{NET.user=ses?ses.user:null;clearTimeout(NET.bt);NET.bt=setTimeout(netBoot,60)});
+NET.sb.auth.getSession().then(({data})=>{NET.user=data&&data.session?data.session.user:null;clearTimeout(NET.bt);NET.bt=setTimeout(netBoot,60)})}catch(e){NET.status='offline';netPaint()}};
+s.onerror=()=>{NET.status='offline';netPaint()};document.head.appendChild(s)}
+async function netBoot(){if(!NET.sb)return;NET.last='';
+if(!NET.user){netStop();NET.status='out';NET.groups=[];NET.members=[];NET.states={};NET.weekly=[];NET.gid=null;netPaint();return netRefreshUi()}
+NET.status='in';await netGroups();netPaint();
+if(NET.gid){await netLoad();netSub();netDirty(true);netFlush()}else{netStop();NET.members=[];NET.states={};NET.weekly=[];netRefreshUi()}
+if(NET.pre&&!NET._nav){NET._nav=1;NET.more=true;go('settings')}}
+async function netGroups(){let r;try{r=await NET.sb.from('members').select('group_id,role,groups(name,code)').eq('user_id',NET.user.id)}catch(e){r={error:e}}
+if(r.error){NET.err=netErr(r.error.message);NET.groups=[];return}
+NET.groups=(r.data||[]).map(x=>({id:x.group_id,role:x.role,name:x.groups&&x.groups.name||'',code:x.groups&&x.groups.code||''}));
+const n=nsv();if(!NET.groups.some(g=>g.id===n.gid))n.gid=NET.groups[0]?NET.groups[0].id:null;NET.gid=n.gid;save()}
+async function netLoad(){const gid=NET.gid;if(!NET.sb||!NET.user||!gid)return;NET.lt=Date.now();
+const q=tb=>NET.sb.from(tb).select('*').eq('group_id',gid);let a,b,c;
+try{[a,b,c]=await Promise.all([q('members'),q('player_state'),q('weekly')])}catch(e){NET.err=netErr(e.message);return}
+if(gid!==NET.gid)return;const er=a.error||b.error||c.error;if(er){NET.err=netErr(er.message);netPaint();return}
+NET.members=a.data||[];NET.states={};(b.data||[]).forEach(r=>NET.states[r.user_id]=r);NET.weekly=c.data||[];NET.err='';netRefreshUi()}
+function netSub(){netStop();const gid=NET.gid;NET.ch=NET.sb.channel('grp-'+gid);
+['player_state','weekly','members'].forEach(tb=>NET.ch.on('postgres_changes',{event:'*',schema:'public',table:tb,filter:'group_id=eq.'+gid},()=>{clearTimeout(NET.rt);NET.rt=setTimeout(netLoad,400)}));NET.ch.subscribe()}
+function netStop(){if(NET.ch&&NET.sb){try{NET.sb.removeChannel(NET.ch)}catch(e){}}NET.ch=null}
+function netRefreshUi(){try{chExpire();chOverlay()}catch(e){}const a=document.querySelector('.page.active');if(!a)return;if(a.id==='players')renderPlayers();else if(a.id==='settings')netPaint()}
+function netDirty(now){try{if(!NET.sb||!NET.user||!NET.gid||!nsv().share)return;clearTimeout(NET.timer);NET.timer=setTimeout(netPush,now?200:1800)}catch(e){}}
+let _th={k:null,v:null};
+function netThumb(){const ph=S.profile.photo;if(!ph)return Promise.resolve(null);const key=ph.length+ph.slice(-24);if(_th.k===key)return Promise.resolve(_th.v);
+return new Promise(res=>{const im=new Image();im.onload=()=>{try{const c=document.createElement('canvas'),s=96;c.width=c.height=s;const x=c.getContext('2d'),r=Math.max(s/im.width,s/im.height);x.drawImage(im,(s-im.width*r)/2,(s-im.height*r)/2,im.width*r,im.height*r);_th={k:key,v:c.toDataURL('image/jpeg',.7)}}catch(e){_th={k:key,v:null}}res(_th.v)};im.onerror=()=>res(null);im.src=ph})}
+async function netPayload(){const pr=S.profile,cats=S.cats.filter(c=>c.pub).map(c=>({id:c.id,n:c.name,p:c.pts,m:+mast(c).toFixed(2),
+goals:S.goals.filter(g=>g.cat===c.id).map(g=>({t:g.title,a:g.active||0,s:(g.steps||[]).map(s=>s.title)})),
+ms:S.missions.filter(m=>m.cat===c.id&&m.type!=='goal').map(m=>({t:m.title,ty:m.type,d:m.done,g:m.target}))}));
+return{pseudo:(pr.name||'').trim().slice(0,24)||null,data:{v:1,desc:(pr.desc||'').slice(0,200),photo:await netThumb(),hidden:S.cats.filter(c=>!c.pub).length,cats,pct:wpct(),pts:wpts(),streak:streakInfo(),cl:S.cats.map(c=>({id:c.id,n:c.name})),ch:{o:chs().out,i:chs().inn}}}}
+async function netPush(){const n=nsv();if(!NET.sb||!NET.user||!NET.gid||!n.share)return;const P=await netPayload(),wk={week:curWeek(),pct:wpct(),pts:wpts()},key=NET.gid+JSON.stringify([P,wk]);if(key===NET.last)return;NET.last=key;
+const ts=new Date().toISOString(),uid=NET.user.id,gid=NET.gid;let a,b;
+try{[a,b]=await Promise.all([NET.sb.from('player_state').upsert({group_id:gid,user_id:uid,pseudo:P.pseudo,data:P.data,updated_at:ts},{onConflict:'group_id,user_id'}),NET.sb.from('weekly').upsert({group_id:gid,user_id:uid,week:wk.week,pct:wk.pct,pts:wk.pts,updated_at:ts},{onConflict:'group_id,user_id,week'})])}catch(e){NET.last='';return}
+if(a.error||b.error){NET.last='';NET.err=netErr((a.error||b.error).message);netPaint()}else netFlush()}
+function netWeekFinal(week,pct,pts){const n=nsv();n.pend=n.pend.filter(x=>x.week!==week);n.pend.push({week,pct,pts});netFlush()}
+async function netFlush(){const n=nsv();if(!NET.sb||!NET.user||!NET.gid||!n.share||!n.pend.length)return;const ts=new Date().toISOString(),rows=n.pend.map(x=>({group_id:NET.gid,user_id:NET.user.id,week:x.week,pct:x.pct,pts:x.pts,updated_at:ts}));
+let r;try{r=await NET.sb.from('weekly').upsert(rows,{onConflict:'group_id,user_id,week'})}catch(e){return}if(!r.error){n.pend=[];try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}}
+async function netAuth(mode){if(!NET.sb)return;const e=($('nEmail').value||'').trim(),p=$('nPass').value||'';NET.err='';NET.msg='';
+if(!e||p.length<6){NET.err='Renseigne l’e-mail et un mot de passe de 6 caractères minimum';return netPaint()}
+NET.busy=true;netPaint();let r;try{r=mode==='up'?await NET.sb.auth.signUp({email:e,password:p}):await NET.sb.auth.signInWithPassword({email:e,password:p})}catch(x){r={error:x}}
+NET.busy=false;if(r.error)NET.err=netErr(r.error.message);else if(mode==='up'&&!(r.data&&r.data.session))NET.msg='Compte créé. Vérifie ta boîte mail pour confirmer ton adresse, puis connecte-toi.';netPaint()}
+async function netOut(){if(NET.sb)await NET.sb.auth.signOut()}
+async function netJoinOp(fn,args,ok){NET.err='';NET.busy=true;netPaint();let r;try{r=await NET.sb.rpc(fn,args)}catch(x){r={error:x}}NET.busy=false;
+if(r.error){NET.err=netErr(r.error.message);return netPaint()}
+const n=nsv();n.gid=r.data;NET.pre=null;NET.more=false;save();showToast(ok);await netBoot()}
+function netCreate(){const n=($('nGname').value||'').trim();if(!n){NET.err='Donne un nom au groupe';return netPaint()}return netJoinOp('create_group',{gname:n},'Groupe créé')}
+function netJoin(){const c=($('nGcode').value||'').trim();if(!c){NET.err='Entre le code du groupe';return netPaint()}return netJoinOp('join_group',{gcode:c},'Groupe rejoint')}
+function netPick(id){nsv().gid=id;save();NET.last='';netBoot()}
+function netMore(){NET.more=true;netPaint()}
+async function netShare(on){const n=nsv();n.share=!!on;save();NET.last='';
+if(!on&&NET.sb&&NET.user&&NET.gid){try{await NET.sb.from('player_state').delete().eq('group_id',NET.gid).eq('user_id',NET.user.id);await NET.sb.from('weekly').delete().eq('group_id',NET.gid).eq('user_id',NET.user.id)}catch(e){}}else netDirty(true);
+netPaint();netLoad()}
+function netCopy(kind){const g=NET.groups.find(x=>x.id===NET.gid);if(!g)return;const txt=kind==='link'?location.href.split('#')[0]+'#join='+g.code:g.code,msg=kind==='link'?'Lien copié':'Code copié';
+if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(()=>showToast(msg),()=>prompt('',txt));else prompt('',txt)}
+function netHtml(){const g=NET.groups.find(x=>x.id===NET.gid),h='<h2>Groupe & invitations</h2>',
+note=NET.err?`<p class="small" style="color:var(--bad,#ff6b6b)">${esc(NET.err)}</p>`:NET.msg?`<p class="small">${esc(NET.msg)}</p>`:'';
+if(NET.status==='loading')return h+'<p>Connexion au serveur en cours…</p>';
+if(NET.status==='offline')return h+'<p>Serveur injoignable. Vérifie ta connexion internet puis recharge la page.</p>';
+if(!NET.user)return h+`<p>Connecte-toi pour jouer en groupe : classement hebdomadaire et profils partagés.</p><div class="field"><label>E-mail</label><input id="nEmail" type="email" autocomplete="email" inputmode="email"></div><div class="field"><label>Mot de passe (6 caractères minimum)</label><input id="nPass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')netAuth('in')"></div>${note}<div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn" ${NET.busy?'disabled':''} onclick="netAuth('in')">Se connecter</button><button class="btn secondary" ${NET.busy?'disabled':''} onclick="netAuth('up')">Créer un compte</button></div>`;
+let o=h+`<p>Connecté avec <b>${esc(NET.user.email||'')}</b></p>`;
+if(g){const n=nsv();o+=(NET.groups.length>1?`<div class="field"><label>Groupe actif</label><select onchange="netPick(this.value)">${NET.groups.map(x=>`<option value="${esc(x.id)}" ${x.id===NET.gid?'selected':''}>${esc(x.name)}</option>`).join('')}</select></div>`:`<p><b>${esc(g.name)}</b></p>`)
++`<div class="field"><label>Code d’invitation</label><div class="netcode">${esc(g.code)}</div></div><div class="row" style="flex-wrap:wrap"><button class="btn secondary" onclick="netCopy('code')">Copier le code</button><button class="btn secondary" onclick="netCopy('link')">Copier le lien</button></div>`
++`<div class="field"><label>Membres</label><div class="list">${NET.members.map(m=>`<div class="item"><div class="grow"><b>${esc(netName(m.user_id))}</b></div>${m.role==='host'?'<span class="pill">Hôte</span>':''}</div>`).join('')}</div></div>`
++`<label class="small" style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${n.share?'checked':''} onchange="netShare(this.checked)"> Partager ma progression avec le groupe</label>${n.share?'':'<p class="small">Désactivé : tes données sont retirées du groupe, tu restes membre.</p>'}`}
+if(!g||NET.more)o+=`<div class="field"><label>Créer un groupe</label><div class="row"><input id="nGname" maxlength="40" placeholder="Nom du groupe" style="flex:1;min-width:0;width:auto"><button class="btn" ${NET.busy?'disabled':''} onclick="netCreate()">Créer</button></div></div><div class="field"><label>Rejoindre un groupe</label><div class="row"><input id="nGcode" maxlength="10" placeholder="Code du groupe" value="${esc(NET.pre||'')}" style="flex:1;min-width:0;width:auto;text-transform:uppercase"><button class="btn" ${NET.busy?'disabled':''} onclick="netJoin()">Rejoindre</button></div></div>`;
+o+=note+'<div class="row" style="margin-top:12px;flex-wrap:wrap">'+(g&&!NET.more?'<button class="btn secondary" onclick="netMore()">Créer ou rejoindre un autre groupe</button>':'')+'<button class="btn secondary" onclick="netOut()">Se déconnecter</button></div>';return o}
+function netPaint(){const b=$('netbox');if(!b)return;const keep={};b.querySelectorAll('input[id]').forEach(i=>keep[i.id]=i.value);const fo=document.activeElement&&b.contains(document.activeElement)?document.activeElement.id:null;
+b.innerHTML=netHtml();Object.keys(keep).forEach(k=>{const i=$(k);if(i&&i.type!=='checkbox')i.value=keep[k]});if(fo&&$(fo))$(fo).focus()}
+function groupHist(){const cw=curWeek(),ws=[...new Set(NET.weekly.map(w=>w.week))].filter(w=>w<cw).sort().reverse().slice(0,8);
+return`<div class="card" style="margin-top:14px"><h2>Semaines précédentes du groupe</h2><div class="list">${ws.map(w=>{const rs=NET.weekly.filter(x=>x.week===w).sort((a,b)=>b.pts-a.pts||b.pct-a.pct);return`<div class="item"><div class="grow"><b>Semaine du ${esc(w)}</b><p>${rs.map(r=>esc(netName(r.user_id))+' '+r.pct+' %').join(' · ')}</p></div></div>`}).join('')||'<p>Aucune semaine terminée pour le moment.</p>'}</div></div>`}
+function netProfile(uid){const st=NET.states[uid],d=st&&st.data,nm=netName(uid);
+if(!d){openModal(nm,'<p>Aucune donnée partagée pour l’instant.</p>');return}
+const ph=safeImg(d.photo),sk=d.streak||{};
+let h=`<div class="row" style="gap:12px;align-items:center"><div class="profilepic" style="width:56px;height:56px;border-radius:16px">${ph?`<img alt="" src="${ph}">`:'♙'}</div><div class="grow"><b>${esc(nm)}</b><p>${esc(d.desc||'')}</p></div></div><div class="streak" style="margin:14px 0"><div class="sk"><small>SÉRIE EN COURS</small><b>${+sk.cur||0}</b></div><div class="sk"><small>RECORD</small><b>${+sk.best||0}</b></div></div>`;
+(d.cats||[]).forEach(c=>{const m=+c.m||0;h+=`<div class="card" style="margin-top:10px"><b>${esc(c.n)}</b><p>Maîtrise · ${String(m).replace('.',',')} niveau${m>=2?'x':''} · ${+c.p||0} pts</p>`
++(c.goals||[]).map(g=>`<p style="margin-top:8px"><b>${esc(g.t)}</b> · ${+g.a||0}/${(g.s||[]).length} étapes</p>`+(g.s||[]).map((s,i)=>`<small style="display:block">${i<g.a?'✓':i===g.a?'▶':'○'} ${esc(s)}</small>`).join('')).join('')
++(c.ms||[]).map(x=>`<small style="display:block;margin-top:4px">${esc(x.t)} · ${+x.d||0}/${+x.g||0}</small>`).join('')+'</div>'});
+if(!(d.cats||[]).length)h+='<p class="small">Aucune catégorie publique.</p>';
+if(d.hidden)h+=`<p class="small">${d.hidden} ${d.hidden>1?'catégories privées':'catégorie privée'}</p>`;
+if(NET.user&&uid!==NET.user.id)h+=chBtn(uid);openModal(nm,h)}
+
+/* ===== Défis entre amis (transitent par player_state.data : aucune table en plus) ===== */
+const chs=()=>{const n=nsv();n.ch=Object.assign({out:[],inn:{},seen:[]},n.ch||{});return n.ch};
+const dayKey=()=>{const t=tp();return t.y+'-'+String(t.mo).padStart(2,'0')+'-'+String(t.d).padStart(2,'0')};
+const stData=u=>{const s=NET.states[u];return s&&s.data||null};
+function chPrune(){const ch=chs(),lim=Date.now()-30*864e5;ch.out=ch.out.filter(c=>c.ts>lim).slice(-30);Object.keys(ch.inn).forEach(k=>{if((ch.inn[k].at||0)<lim)delete ch.inn[k]})}
+function chPending(){if(!NET.user)return[];const me=NET.user.id,inn=chs().inn,res=[];
+NET.members.forEach(m=>{if(m.user_id===me)return;const d=stData(m.user_id),o=d&&d.ch&&d.ch.o||[];o.forEach(c=>{if(c&&c.to===me&&!inn[c.id])res.push(Object.assign({},c,{from:m.user_id}))})});return res.sort((a,b)=>a.ts-b.ts)}
+function chBlocked(to){const ri=(stData(to)||{}).ch&&stData(to).ch.i||{};return chs().out.some(c=>c.to===to&&!ri[c.id])}
+function chNotices(){const ch=chs(),res=[];ch.out.forEach(c=>{const r=(((stData(c.to)||{}).ch||{}).i||{})[c.id];if(r&&r.st==='done'&&!ch.seen.includes(c.id))res.push({id:c.id,who:netName(c.to),text:c.text,cat:c.cat})});return res}
+function chSeen(id){const ch=chs();ch.seen.push(id);ch.seen=ch.seen.slice(-60);save();chOverlay()}
+function chExpire(){const ch=chs(),k=dayKey();let a=0;Object.keys(ch.inn).forEach(id=>{const e=ch.inn[id];if(e.st==='acc'&&e.day<k){e.st='exp';a=1}});if(a){save();netDirty(true);chRefresh()}}
+function chRefresh(){chOverlay();const a=document.querySelector('.page.active');if(a&&(a.id==='players'||a.id==='home'))renderAll()}
+function chAnswer(id,acc){const p=chPending().find(x=>x.id===id);if(!p)return;const ch=chs();ch.inn[id]={from:p.from,st:acc?'acc':'dec',day:acc?dayKey():null,at:Date.now(),cat:p.cat,cid:p.cid,text:p.text};chPrune();save();netDirty(true);showToast(acc?'Défi accepté':'Défi refusé');chRefresh()}
+function chDone(id){const ch=chs(),e=ch.inn[id];if(!e||e.st!=='acc')return;
+if(e.day!==dayKey()){e.st='exp';save();netDirty(true);showToast('Défi expiré');return chRefresh()}
+e.st='done';e.at=Date.now();const c=cat(e.cid);if(c)c.pts+=1;save();netDirty(true);showToast('Défi accompli · +1 effort');chRefresh()}
+function chOverlay(){let o=$('chOv');const on=NET.user&&NET.gid&&nsv().share,P=on?chPending():[],N=on?chNotices():[];
+if(!P.length&&!N.length){if(o){o.classList.remove('on');o.__sig='';o.innerHTML=''}return}
+const sig=P.map(x=>x.id).join()+'|'+N.map(x=>x.id).join();
+if(!o){o=document.createElement('div');o.id='chOv';o.setAttribute('role','alertdialog');o.setAttribute('aria-modal','true');document.body.appendChild(o)}
+if(o.__sig!==sig){o.__sig=sig;o.innerHTML='<div class="chwrap">'+P.map(c=>`<div class="chcard"><div class="chtag">DÉFI REÇU</div><p class="chfrom"><b>${esc(netName(c.from))}</b> te lance un défi</p><div class="chcat">${esc(c.cat)}</div><div class="chtext">${esc(c.text)}</div><p class="small">Récompense : +1 effort dans cette catégorie.</p><p class="small">À accomplir avant la fin de la journée, sans conséquence en cas d’échec.</p><div class="row" style="margin-top:14px"><button class="btn" onclick="chAnswer('${c.id}',true)">Accepter</button><button class="btn secondary" onclick="chAnswer('${c.id}',false)">Refuser</button></div></div>`).join('')
++N.map(c=>`<div class="chcard"><div class="chtag">DÉFI RELEVÉ</div><p class="chfrom"><b>${esc(c.who)}</b> a relevé ton défi</p><div class="chcat">${esc(c.cat)}</div><div class="chtext">${esc(c.text)}</div><div class="row" style="margin-top:14px"><button class="btn" onclick="chSeen('${c.id}')">OK</button></div></div>`).join('')+'</div>'}
+o.classList.add('on')}
+function chActiveList(){const ch=chs();return Object.keys(ch.inn).map(k=>Object.assign({id:k},ch.inn[k])).filter(e=>e.st==='acc').sort((a,b)=>a.at-b.at).map(e=>`<div class="item"><div class="grow"><b>${esc(e.text)}</b><p>${esc(netName(e.from))} · ${esc(e.cat)}</p><p class="small">Jusqu’à la fin de la journée</p></div><button class="btn" onclick="chDone('${e.id}')">Accompli</button></div>`).join('')}
+function chCards(){let h='';const a=chActiveList();if(a)h+=`<div class="card" style="margin-top:14px"><div class="eyebrow">DÉFI DU JOUR</div><h2>Défis en cours</h2><div class="list">${a}</div></div>`;
+const o=chs().out.slice(-6).reverse();
+if(o.length)h+=`<div class="card" style="margin-top:14px"><h2>Défis envoyés</h2><div class="list">${o.map(c=>{const r=(((stData(c.to)||{}).ch||{}).i||{})[c.id],s=!r?'En attente':r.st==='acc'?'Accepté':r.st==='dec'?'Refusé':r.st==='done'?'Accompli':'Expiré';return`<div class="item"><div class="grow"><b>${esc(c.text)}</b><p>${esc(netName(c.to))} · ${esc(c.cat)}</p></div><span class="pill">${s}</span></div>`}).join('')}</div></div>`;return h}
+function chHomeCard(){const old=$('chHome');if(old)old.remove();const a=chActiveList();if(!a)return;const h=document.querySelector('#home h1');if(!h)return;h.insertAdjacentHTML('afterend',`<div class="card" id="chHome" style="margin-bottom:14px"><div class="eyebrow">DÉFI DU JOUR</div><div class="list">${a}</div></div>`)}
+function chBtn(to){const d=stData(to);if(!d||!(d.cl&&d.cl.length))return'';if(chBlocked(to))return'<p class="small" style="margin-top:12px">Un défi est déjà en attente de réponse.</p>';return`<button class="btn" style="margin-top:14px" onclick="chForm('${to}')">Lancer un défi</button>`}
+function chForm(to){const d=stData(to);if(!d||chBlocked(to))return;
+openModal('Lancer un défi',`<p><b>${esc(netName(to))}</b></p><div class="field"><label>Catégorie de l’ami</label><select id="chCat">${(d.cl||[]).map(c=>`<option value="${esc(c.id)}">${esc(c.n)}</option>`).join('')}</select></div><div class="field"><label>Ton défi</label><input id="chText" maxlength="80" placeholder="Ex. 20 pompes avant ce soir"></div><p class="small">Petite récompense : +1 effort dans la catégorie choisie.</p><button class="btn" style="margin-top:12px" onclick="chSend('${to}')">Envoyer le défi</button>`)}
+function chSend(to){const text=($('chText').value||'').trim().slice(0,80);if(!text){showToast('Écris le défi');return}if(chBlocked(to)){showToast('Un défi est déjà en attente de réponse.');return}
+const d=stData(to),c=((d&&d.cl)||[]).find(x=>x.id===$('chCat').value);if(!c)return;
+const ch=chs();ch.out.push({id:uid(),to,cid:c.id,cat:c.n,text,ts:Date.now()});chPrune();save();netDirty(true);closeModal();showToast('Défi envoyé');chRefresh()}
+const _rh=renderHome;renderHome=function(){_rh();chHomeCard()};
+setInterval(()=>{try{chExpire()}catch(e){}},60000);
+rollover();renderHome();paintMobile();paintQuick();paintAnim();startTr();netInit();
 setInterval(()=>{const k=S.week;rollover();S.week!==k?renderAll():tick();chkRem();if(S.todoOpen)paintQuick();if(document.querySelector('.page.active').id==='missions')renderMissions()},30000);chkRem();paintSw();$('qdays').innerHTML=dayPick('qdp');
 if('serviceWorker' in navigator && location.protocol!=='file:'){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)location.reload()});window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
 </script>
