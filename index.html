@@ -281,6 +281,27 @@ body.mobile #quick{width:min(86vw,320px)}
 body[data-theme="persona"] h2,body[data-theme="persona"] .profile-name,body[data-theme="persona"] .big-number{text-shadow:-2px 0 #000,2px 0 #000,0 -2px #000,0 2px #000,-2px -2px #000,2px -2px #000,-2px 2px #000,2px 2px #000,4px 4px 0 var(--accent)}
 .info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-left:10px;padding:0;border-radius:50%;border:1.5px solid currentColor;background:transparent;color:inherit;font:italic 700 13px/1 Georgia,serif;text-transform:none;vertical-align:middle;opacity:.8;cursor:pointer;text-shadow:none;transform:none;letter-spacing:0}.info:hover{opacity:1}h2 .info{width:18px;height:18px;font-size:11px}.eyebrow .info{width:16px;height:16px;font-size:10px;margin-left:6px}
 
+
+/* Bloodborne : brume mouvante de Yharnam, contrôlée par le bouton Animations */
+body[data-theme="bloodborne"] .app::before{
+  content:"";position:fixed;inset:-18%;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 38% 22% at 12% 72%,rgba(190,184,166,.16),transparent 72%),
+    radial-gradient(ellipse 44% 26% at 72% 58%,rgba(166,160,148,.13),transparent 74%),
+    radial-gradient(ellipse 34% 20% at 48% 88%,rgba(210,202,183,.12),transparent 72%),
+    radial-gradient(ellipse 52% 28% at 92% 28%,rgba(145,143,137,.12),transparent 75%);
+  filter:blur(22px);opacity:.82;mix-blend-mode:screen;
+  transform:translate3d(-3%,0,0) scale(1.04);
+  animation:bbFogDrift 24s ease-in-out infinite alternate;
+}
+@keyframes bbFogDrift{
+  0%{transform:translate3d(-4%,1%,0) scale(1.04);background-position:0 0,100% 30%,20% 100%,80% 0;opacity:.58}
+  50%{transform:translate3d(2%,-1%,0) scale(1.08);background-position:35% 15%,65% 55%,55% 75%,20% 35%;opacity:.9}
+  100%{transform:translate3d(5%,1%,0) scale(1.05);background-position:70% 25%,10% 80%,85% 45%,0 70%;opacity:.66}
+}
+body.noanim[data-theme="bloodborne"] .app::before{display:none!important}
+@media(prefers-reduced-motion:reduce){body[data-theme="bloodborne"] .app::before{display:none!important}}
+
 /* Solo Leveling : glitch « vieille télé » au changement de rubrique */
 body[data-theme="solo"] .page.active::before{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;background-image:linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a),linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a);background-repeat:no-repeat;background-size:30px 30px,20px 20px,46px 14px,12px 12px,26px 26px,16px 16px;filter:blur(1.6px) saturate(2.6);mix-blend-mode:screen;animation:sgSq .55s steps(1,end) both}
 body[data-theme="solo"] .page.active::after{content:"";position:fixed;inset:0;z-index:41;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.38) 0 1px,transparent 1px 3px);filter:blur(.4px);animation:sgScan .55s steps(1,end) both}
