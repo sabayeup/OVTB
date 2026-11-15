@@ -14,7 +14,7 @@
 :root{--accent:#d94b4b;--bg:#101114;--panel:#191b20;--panel2:#22252c;--text:#f4f4f5;--muted:#9b9da6;--line:#30333b;--good:#67c59a;--warn:#e6bd65}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
 button,input,textarea,select{font:inherit}button{cursor:pointer}
-.app{max-width:1120px;margin:auto;min-height:100dvh;padding-bottom:90px}
+.app{position:relative;isolation:isolate;max-width:1120px;margin:auto;min-height:100dvh;padding-bottom:90px}
 header{height:68px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:sticky;top:0;background:#101114ed;backdrop-filter:blur(14px);z-index:5}
 .brand{font-weight:900;letter-spacing:.19em;font-size:14px}.brand span{color:var(--accent)}.head-actions{display:flex;gap:8px}.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;width:40px;height:40px}
 main{padding:24px 22px 32px}.page{display:none;animation:fade .18s ease}.page.active{display:block}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -282,25 +282,25 @@ body[data-theme="persona"] h2,body[data-theme="persona"] .profile-name,body[data
 .info{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-left:10px;padding:0;border-radius:50%;border:1.5px solid currentColor;background:transparent;color:inherit;font:italic 700 13px/1 Georgia,serif;text-transform:none;vertical-align:middle;opacity:.8;cursor:pointer;text-shadow:none;transform:none;letter-spacing:0}.info:hover{opacity:1}h2 .info{width:18px;height:18px;font-size:11px}.eyebrow .info{width:16px;height:16px;font-size:10px;margin-left:6px}
 
 
-/* Bloodborne : brume mouvante de Yharnam, contrôlée par le bouton Animations */
-body[data-theme="bloodborne"] .app::before{
-  content:"";position:fixed;inset:-18%;z-index:1;pointer-events:none;
+/* Bloodborne : brume animée de Yharnam */
+#bbFog{
+  position:fixed;inset:-22%;z-index:1;pointer-events:none;overflow:hidden;
+  opacity:.72;mix-blend-mode:screen;filter:blur(28px);
   background:
-    radial-gradient(ellipse 38% 22% at 12% 72%,rgba(190,184,166,.16),transparent 72%),
-    radial-gradient(ellipse 44% 26% at 72% 58%,rgba(166,160,148,.13),transparent 74%),
-    radial-gradient(ellipse 34% 20% at 48% 88%,rgba(210,202,183,.12),transparent 72%),
-    radial-gradient(ellipse 52% 28% at 92% 28%,rgba(145,143,137,.12),transparent 75%);
-  filter:blur(22px);opacity:.82;mix-blend-mode:screen;
-  transform:translate3d(-3%,0,0) scale(1.04);
-  animation:bbFogDrift 24s ease-in-out infinite alternate;
+    radial-gradient(ellipse 42% 25% at 12% 68%,rgba(205,202,190,.34),transparent 72%),
+    radial-gradient(ellipse 48% 30% at 72% 58%,rgba(180,181,174,.28),transparent 74%),
+    radial-gradient(ellipse 38% 24% at 48% 88%,rgba(220,214,198,.25),transparent 72%),
+    radial-gradient(ellipse 55% 32% at 92% 28%,rgba(165,166,160,.25),transparent 75%);
+  animation:bbFogDrift 19s ease-in-out infinite alternate;
 }
 @keyframes bbFogDrift{
-  0%{transform:translate3d(-4%,1%,0) scale(1.04);background-position:0 0,100% 30%,20% 100%,80% 0;opacity:.58}
-  50%{transform:translate3d(2%,-1%,0) scale(1.08);background-position:35% 15%,65% 55%,55% 75%,20% 35%;opacity:.9}
-  100%{transform:translate3d(5%,1%,0) scale(1.05);background-position:70% 25%,10% 80%,85% 45%,0 70%;opacity:.66}
+  0%{transform:translate3d(-5%,1%,0) scale(1.04);background-position:0 0,100% 30%,20% 100%,80% 0;opacity:.48}
+  50%{transform:translate3d(2%,-2%,0) scale(1.1);background-position:35% 15%,65% 55%,55% 75%,20% 35%;opacity:.82}
+  100%{transform:translate3d(6%,1%,0) scale(1.06);background-position:70% 25%,10% 80%,85% 45%,0 70%;opacity:.58}
 }
-body.noanim[data-theme="bloodborne"] .app::before{display:none!important}
-@media(prefers-reduced-motion:reduce){body[data-theme="bloodborne"] .app::before{display:none!important}}
+body.noanim[data-theme="bloodborne"] #bbFog{display:none!important}
+body:not([data-theme="bloodborne"]) #bbFog{display:none!important}
+@media(prefers-reduced-motion:reduce){#bbFog{display:none!important}}
 
 /* Solo Leveling : glitch « vieille télé » au changement de rubrique */
 body[data-theme="solo"] .page.active::before{content:"";position:fixed;inset:0;z-index:40;pointer-events:none;background-image:linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a),linear-gradient(#18e0ff,#18e0ff),linear-gradient(#8a4dff,#8a4dff),linear-gradient(#ff2e9a,#ff2e9a);background-repeat:no-repeat;background-size:30px 30px,20px 20px,46px 14px,12px 12px,26px 26px,16px 16px;filter:blur(1.6px) saturate(2.6);mix-blend-mode:screen;animation:sgSq .55s steps(1,end) both}
@@ -376,7 +376,7 @@ body.mobile[data-theme] .navbtn{font-size:9px;letter-spacing:.02em}
 <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onload="window.sbInit&&sbInit()"></script>
 </head>
 <body data-theme="persona">
-<div class="app">
+<div class="app"><div id="bbFog" aria-hidden="true"></div>
 <header><span class="trslot"></span><div class="brand">OVTB<span> / </span>SOCIAL PLAYER SYSTEM</div><div class="head-actions"><button class="iconbtn on" id="animBtn" title="Animations" aria-pressed="true" onclick="setAnim(S.anim===false)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path class="slash" d="M4 20L20 4"/></svg></button><button class="iconbtn" id="mobBtn" title="Version mobile" aria-pressed="false" onclick="toggleMobile()"><svg class="i-phone" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg><svg class="i-desk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button><button class="iconbtn" id="bellBtn" title="Notifications" onclick="ntOpen()" style="position:relative">♧<span id="bellDot"></span></button><button class="iconbtn" title="Paramètres" onclick="go('settings')">⚙</button></div></header>
 <main>
 <section id="home" class="page active"></section>
