@@ -6,7 +6,7 @@
      (sous le rouage des paramètres). Change uniquement le texte entre
      guillemets, par exemple 'ver.2.3'. Rien d'autre à toucher.
      ===================================================================== -->
-<script>window.APP_VERSION = 'ver.3.5';</script>
+<script>window.APP_VERSION = 'ver.3.8';</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -30,6 +30,8 @@ body[data-theme="bloodborne"] .app-ver{color:var(--gold);font-style:italic}
 body[data-theme="persona"] .app-ver{color:var(--ink,#fff);text-shadow:none}
 body[data-theme="solo"] .app-ver{color:#8fcaff}
 main{padding:24px 22px 32px}.page{display:none;animation:fade .18s ease}.page.active{display:block}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* Dans Paramètres, les changements d’options et sous-fenêtres sont instantanés. La navigation vers une autre page garde son effet normal. */
+#settings.page.active,#settings.page.active *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 .eyebrow{color:var(--muted);font-size:11px;letter-spacing:.16em;font-weight:750;text-transform:uppercase}
 h1{font-size:27px;line-height:1.15;margin:6px 0 18px}h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:0 0 5px}
 p{margin:4px 0;color:var(--muted)}.muted{color:var(--muted)}.small{font-size:12px}.grid{display:grid;gap:14px}.homegrid{grid-template-columns:1.15fr .85fr}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;min-width:0}.row{display:flex;align-items:center;gap:12px}.between{justify-content:space-between}.profilepic{width:66px;height:66px;border-radius:17px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;border:1px solid var(--line);flex:none}.profilepic img{width:100%;height:100%;object-fit:cover}.avatar-placeholder{font-size:24px;color:var(--muted)}.profile-name{font-weight:800;font-size:19px}.tag{font-size:10px;letter-spacing:.12em;color:var(--accent);font-weight:800}.accentline{height:3px;width:32px;background:var(--accent);border-radius:8px;margin-bottom:12px}
@@ -547,6 +549,16 @@ body[data-theme="fairytail"] .thtile{background:#f1deb0;border-color:#8a5a2b;col
 .cpPrefGrid .field{min-width:0}.cpPrefGrid input[type=color]{width:100%;height:40px;padding:2px}.cpPrefGrid input[type=range]{width:100%}
 @keyframes cpVnEnter{from{opacity:0;transform:translateY(28px) scale(.94)}to{opacity:1;transform:none}}
 @media(max-width:600px){.cp-vn-scene{height:65vh;align-items:flex-end;padding-bottom:8vh}.cp-vn-person{height:min(57vh,560px);max-width:96vw}.cp-vn-dialog{bottom:max(12px,env(safe-area-inset-bottom));width:96vw;min-height:130px;max-height:35vh;padding:22px 20px 20px}.cp-vn-text{font-size:clamp(15px,4.2vw,19px);line-height:1.4}.cp-vn-name{font-size:16px}.cpPrefGrid{grid-template-columns:1fr 1fr}}
+/* Ajustement VN : boîte centrée, compagnon intégré à gauche et taille réduite */
+.cp-vn{display:flex;align-items:center;justify-content:center;padding:18px}
+.cp-vn-scene{display:none!important}
+.cp-vn-dialog{position:relative;left:auto;bottom:auto;transform:none;width:min(88vw,780px);min-height:0;max-height:72vh;padding:22px 28px;display:grid;grid-template-columns:clamp(76px,13vw,132px) minmax(0,1fr);align-items:center;gap:22px;overflow:auto;pointer-events:none}
+.cp-vn-person{display:block;width:100%;height:clamp(90px,19vh,176px);max-width:100%;object-fit:contain;object-position:center;filter:drop-shadow(0 5px 10px #0008);animation:cpVnEnter .4s ease both}
+.cp-vn-icon{width:100%;height:clamp(76px,13vw,132px);font-size:clamp(42px,8vw,76px);border-radius:14px}
+.cp-vn-words{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.cp-vn-name{font-size:clamp(14px,1.8vw,19px)}
+.cp-vn-text{font-size:clamp(15px,1.8vw,20px);line-height:1.45}
+@media(max-width:600px){.cp-vn{padding:10px}.cp-vn-dialog{width:min(94vw,560px);max-height:72vh;grid-template-columns:72px minmax(0,1fr);gap:12px;padding:17px 14px;min-height:0}.cp-vn-person{height:112px;width:72px}.cp-vn-icon{width:72px;height:82px;font-size:42px}.cp-vn-name{font-size:14px}.cp-vn-text{font-size:15px;line-height:1.4}.cp-vn-sub{font-size:10px}}
 </style>
 </head>
 <body data-theme="persona">
@@ -1532,20 +1544,17 @@ function cpCrop(src,theme){return new Promise(resolve=>{if(!src)return resolve('
 window.cpRenderVN=async function(o){
  const cl=!!(o.calm||(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches),ap=cpAp(),th=o.theme||document.body.dataset.theme||'solo';
  const ov=document.createElement('div');ov.className='cp cp-vn cp-vn-'+th+(cl?' cp-calm':'');
- const scene=document.createElement('div');scene.className='cp-vn-scene';
  const portrait=document.createElement('img');portrait.className='cp-vn-person';portrait.alt='';
  const bubble=document.createElement('div');bubble.className='cp-vn-dialog '+(ap.mode==='custom'?'is-custom':'is-theme')+' shape-'+(ap.shape||'square');
- if(ap.mode==='theme'&&o.frame){bubble.style.backgroundImage='url("'+o.frame+'")'}
- else if(ap.mode==='custom'){bubble.style.backgroundColor=ap.bg||'#101522';bubble.style.backgroundColor=(ap.bg||'#101522')+Math.round(Math.max(.1,Math.min(1,+ap.opacity||.88))*255).toString(16).padStart(2,'0')}
+ if(ap.mode==='custom'){bubble.style.backgroundColor=ap.bg||'#101522';bubble.style.backgroundColor=(ap.bg||'#101522')+Math.round(Math.max(.1,Math.min(1,+ap.opacity||.88))*255).toString(16).padStart(2,'0')}
  const speaker=document.createElement('div');speaker.className='cp-vn-name';speaker.textContent=o.name||'';
  const sub=document.createElement('div');sub.className='cp-vn-sub';sub.textContent=o.header||'';
  const text=document.createElement('div');text.className='cp-vn-text';text.textContent=o.text||'';
+ const words=document.createElement('div');words.className='cp-vn-words';
  const fonts=cpFonts; speaker.style.fontFamily=fonts[ap.nameFont]||fonts.system;text.style.fontFamily=fonts[ap.textFont]||fonts.system;
  speaker.style.color=ap.nameColor||'#f4d58d';text.style.color=ap.textColor||'#fff';
- if(ap.mode==='custom'){speaker.style.color=ap.nameColor||'#f4d58d';text.style.color=ap.textColor||'#fff'}
- bubble.append(speaker,sub,text);scene.appendChild(portrait);ov.append(scene,bubble);
- let icon=null;if(o.portrait){portrait.src=o.portrait}else{icon=document.createElement('div');icon.className='cp-vn-icon';icon.textContent=o.icon||'✦';scene.appendChild(icon)}
- if(o.theme==='solo')scene.classList.add('is-system');
+ words.append(speaker,sub,text);bubble.append(portrait,words);ov.append(bubble);
+ let icon=null;if(o.portrait){portrait.src=o.portrait}else{icon=document.createElement('div');icon.className='cp-vn-icon';icon.textContent=o.icon||'✦';bubble.insertBefore(icon,words)}
  let ready=0,iv=0;const close=()=>{if(Date.now()-ready<450)return;clearInterval(iv);removeEventListener('keydown',keyClose);ov.classList.add('out');setTimeout(()=>ov.remove(),cl?0:260)};const keyClose=e=>{if(e.key==='Escape'||e.key==='Enter'||e.key===' ')close()};
  ov.addEventListener('click',close);addEventListener('keydown',keyClose);document.body.appendChild(ov);
  const txt=String(o.text||'');
@@ -1875,7 +1884,8 @@ window.go=function(p){const cur=document.querySelector('.page.active'),from=cur&
 const OPEN={openModal:()=>$('modal').classList.contains('open'),fvOpen:()=>$('fv').classList.contains('open'),thPage:()=>{const e=document.getElementById('thP');return e&&e.classList.contains('open')},thOpen:()=>{const e=document.getElementById('thM');return e&&e.classList.contains('open')},cuOpen:()=>{const e=document.getElementById('cuM');return e&&e.classList.contains('open')},ccOpen:()=>{const e=document.getElementById('ccM');return e&&e.classList.contains('open')}};
 const offNow=()=>(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
 window.trWrap=n=>{const f=window[n];if(typeof f!=='function'||f.__tr)return;const w=function(){const a=arguments,me=this,c=cfg();
- if(busy||n==='thOpen'||window.__trSkip||offNow()||c.type==='none'||(OPEN[n]&&OPEN[n]()))return f.apply(me,a);
+ const settingsActive=!!document.querySelector('#settings.page.active');
+ if(busy||settingsActive||n==='thOpen'||window.__trSkip||offNow()||c.type==='none'||(OPEN[n]&&OPEN[n]()))return f.apply(me,a);
  busy=true;let done=false;const sw=()=>{if(!done){done=true;f.apply(me,a)}};run(c,true,sw).catch(()=>{}).finally(()=>{sw();busy=false})};w.__tr=1;window[n]=w};
 /* Les actions de l'en-tête ouvrent leurs panneaux sans transition. */
 ['ntOpen','acOpen'].forEach(n=>{
