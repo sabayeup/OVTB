@@ -6,7 +6,7 @@
      (sous le rouage des paramètres). Change uniquement le texte entre
      guillemets, par exemple 'ver.2.3'. Rien d'autre à toucher.
      ===================================================================== -->
-<script>window.APP_VERSION = 'ver.4.0';</script>
+<script>window.APP_VERSION = 'ver.3.9';</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -583,6 +583,28 @@ body[data-theme="fairytail"] .thtile{background:#f1deb0;border-color:#8a5a2b;col
 @keyframes cpSimpleFade{from{opacity:0}to{opacity:1}}
 @media(max-width:600px){.cp-vn{padding:12px}.cp-vn-stage{width:min(94vw,560px);min-height:142px}.cp-vn-dialog{min-height:142px;max-height:70vh;padding:23px 15px 20px 108px}.cp-vn-person{left:-15px;bottom:-5px;height:clamp(145px,25vh,210px);max-width:39%}.cp-vn-icon{left:-8px;bottom:8px;width:96px;height:110px;font-size:48px}.cp-vn-name.is-outside{left:85px;top:-21px;padding:6px 13px;min-width:90px;font-size:14px}.cp-vn-text{font-size:15px;line-height:1.4}.cp-vn-sub{font-size:10px}.cp-vn-name:not(.is-outside){font-size:14px}}
 @media(prefers-reduced-motion:reduce){.cp-vn-stage,.cp-vn-person,.cp-vn-dialog{animation:none!important}}
+
+/* Disposition dédiée à Rem : portrait débordant à gauche, dialogue ancré en bas */
+.cp-vn-rem{align-items:flex-end!important;justify-content:center!important;padding:0 0 max(18px,env(safe-area-inset-bottom))!important;overflow:visible!important}
+.cp-vn-rem .cp-vn-stage{position:absolute;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(96vw,1120px);min-height:158px;display:block;overflow:visible}
+.cp-vn-rem .cp-vn-dialog{position:relative;left:auto;right:auto;bottom:auto;transform:none;width:100%;min-height:158px;max-height:36vh;overflow:auto;padding:28px 34px 24px clamp(170px,21vw,260px);display:flex;flex-direction:column;justify-content:center;gap:7px}
+.cp-vn-rem .cp-vn-person{position:absolute;z-index:4;left:0;bottom:0;width:auto;height:clamp(205px,35vh,350px);max-width:30%;object-fit:contain;object-position:left bottom;filter:drop-shadow(0 8px 16px #000a);pointer-events:none}
+.cp-vn-rem .cp-vn-icon{position:absolute;z-index:4;left:8px;bottom:10px;width:clamp(112px,15vw,170px);height:clamp(112px,15vw,170px);font-size:clamp(54px,8vw,82px)}
+.cp-vn-rem .cp-vn-words{position:relative;z-index:1;min-width:0;width:100%;display:flex;flex-direction:column;justify-content:center;gap:6px;text-align:left}
+.cp-vn-rem .cp-vn-name.is-outside{position:absolute;z-index:5;left:clamp(150px,19vw,235px);top:-23px;padding:7px 18px;background:#fff;color:#111!important;border:2px solid #111;clip-path:polygon(0 0,100% 0,100% 78%,16% 78%,0 100%);font-size:clamp(15px,1.8vw,21px);font-weight:900;text-shadow:none;min-width:110px}
+.cp-vn-rem .cp-vn-name:not(.is-outside){display:block;margin:0 0 2px;text-align:left}
+.cp-vn-rem .cp-vn-text{text-align:left}
+@media(max-width:600px){
+ .cp-vn-rem{padding:0 0 max(10px,env(safe-area-inset-bottom))!important}
+ .cp-vn-rem .cp-vn-stage{width:96vw;min-height:132px;bottom:max(10px,env(safe-area-inset-bottom))}
+ .cp-vn-rem .cp-vn-dialog{width:100%;min-height:132px;max-height:38vh;padding:23px 14px 18px 112px}
+ .cp-vn-rem .cp-vn-person{left:0;bottom:0;height:clamp(155px,25vh,205px);max-width:37%}
+ .cp-vn-rem .cp-vn-icon{left:0;bottom:8px;width:92px;height:100px;font-size:46px}
+ .cp-vn-rem .cp-vn-name.is-outside{left:104px;top:-20px;padding:5px 12px;min-width:86px;font-size:14px}
+ .cp-vn-rem .cp-vn-name:not(.is-outside){font-size:14px}
+ .cp-vn-rem .cp-vn-text{font-size:15px;line-height:1.4}
+}
+
 </style>
 </head>
 <body data-theme="persona">
@@ -1568,7 +1590,7 @@ function cpCrop(src,theme){return new Promise(resolve=>{if(!src)return resolve('
 window.cpRenderVN=async function(o){
  const ap=cpAp(),th=o.theme||document.body.dataset.theme||'solo',anim=ap.animation||'persona';
  const cl=anim==='none'||o.calm||(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
- const ov=document.createElement('div');ov.className='cp cp-vn cp-vn-'+th+' cp-anim-'+(cl?'none':anim);
+ const ov=document.createElement('div');ov.className='cp cp-vn cp-vn-'+th+((String(o.name||'').trim().toLowerCase()==='rem')?' cp-vn-rem':'')+' cp-anim-'+(cl?'none':anim);
  const stage=document.createElement('div');stage.className='cp-vn-stage';
  const portrait=document.createElement('img');portrait.className='cp-vn-person';portrait.alt='';
  const bubble=document.createElement('div');bubble.className='cp-vn-dialog '+(ap.mode==='custom'?'is-custom':'is-theme')+' shape-'+(ap.shape||'square');
