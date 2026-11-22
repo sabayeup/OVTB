@@ -6,7 +6,7 @@
      (sous le rouage des paramètres). Change uniquement le texte entre
      guillemets, par exemple 'ver.2.3'. Rien d'autre à toucher.
      ===================================================================== -->
-<script>window.APP_VERSION = 'ver.3.3';</script>
+<script>window.APP_VERSION = 'ver.3.5';</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -518,6 +518,36 @@ body[data-theme="fairytail"] .thtile{background:#f1deb0;border-color:#8a5a2b;col
 @keyframes cpPop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onload="window.sbInit&&sbInit()"></script>
+
+<style id="cpVnCss">
+.cp-vn{padding:0;overflow:hidden;background:rgba(3,5,12,.58);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);cursor:pointer}
+.cp-vn-scene{position:absolute;inset:0 0 auto;height:68vh;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden}
+.cp-vn-person{display:block;height:min(64vh,650px);width:auto;max-width:92vw;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 14px 28px #0009);animation:cpVnEnter .55s cubic-bezier(.2,.8,.2,1) both}
+.cp-vn-icon{width:min(38vw,280px);height:min(38vw,280px);display:grid;place-items:center;border-radius:50%;font-size:clamp(70px,18vw,150px);background:radial-gradient(circle,#3d9dff55,transparent 70%);filter:drop-shadow(0 0 24px #399dff88)}
+.cp-vn-dialog{position:absolute;z-index:2;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,960px);min-height:142px;max-height:34vh;overflow:auto;padding:30px 48px 25px;background-repeat:no-repeat;background-position:center;background-size:100% 100%;display:flex;flex-direction:column;justify-content:center;gap:7px;pointer-events:none;text-shadow:0 1px 4px #0008}
+.cp-vn-dialog.is-theme{border-radius:4px;background-color:rgba(12,12,15,.96)}
+.cp-vn-bloodborne .cp-vn-dialog.is-theme{background-color:rgba(12,10,10,.96);border:2px solid #9b8060;box-shadow:inset 0 0 0 3px #33291f,0 8px 28px #0009}
+.cp-vn-persona .cp-vn-dialog.is-theme{background-color:rgba(13,13,17,.96);border:3px solid #fff;box-shadow:8px 8px 0 #d92836,0 10px 30px #0009}
+.cp-vn-bloodborne .cp-vn-dialog.is-theme{color:#ead9bd}
+.cp-vn-persona .cp-vn-dialog.is-theme{color:#fff}
+.cp-vn-solo .cp-vn-dialog.is-theme{color:#d6ecff}
+.cp-vn-dialog.is-custom{border:1px solid #ffffff55;box-shadow:0 12px 40px #0008;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-shadow:none}
+.cp-vn-dialog.shape-square{border-radius:2px}
+.cp-vn-dialog.shape-rounded{border-radius:22px}
+.cp-vn-dialog.shape-speech{border-radius:18px}
+.cp-vn-dialog.shape-speech:before{content:"";position:absolute;left:48px;top:-14px;border-width:0 0 16px 20px;border-style:solid;border-color:transparent transparent currentColor transparent;opacity:.75}
+.cp-vn-name{font-weight:800;letter-spacing:.045em;font-size:clamp(15px,2.2vw,21px);margin-bottom:1px;color:#f4d58d}
+.cp-vn-sub{font-size:clamp(11px,1.5vw,14px);font-weight:700;letter-spacing:.04em;opacity:.86}
+.cp-vn-text{font-size:clamp(16px,2.15vw,23px);line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.cp-vn-solo .cp-vn-dialog.is-theme{border:1px solid #64baff99;box-shadow:0 0 25px #2f8bff55;background-color:#04142be8}
+.cp-vn-bloodborne .cp-vn-dialog.is-theme{filter:drop-shadow(0 4px 12px #0009)}
+.cp-vn-persona .cp-vn-dialog.is-theme{filter:drop-shadow(0 5px 14px #0009)}
+.cp-vn.out .cp-vn-person{animation:cpOut .25s ease both}
+.cpPrefGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cpPrefGrid .field{min-width:0}.cpPrefGrid input[type=color]{width:100%;height:40px;padding:2px}.cpPrefGrid input[type=range]{width:100%}
+@keyframes cpVnEnter{from{opacity:0;transform:translateY(28px) scale(.94)}to{opacity:1;transform:none}}
+@media(max-width:600px){.cp-vn-scene{height:65vh;align-items:flex-end;padding-bottom:8vh}.cp-vn-person{height:min(57vh,560px);max-width:96vw}.cp-vn-dialog{bottom:max(12px,env(safe-area-inset-bottom));width:96vw;min-height:130px;max-height:35vh;padding:22px 20px 20px}.cp-vn-text{font-size:clamp(15px,4.2vw,19px);line-height:1.4}.cp-vn-name{font-size:16px}.cpPrefGrid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body data-theme="persona">
 <div class="app">
@@ -1493,6 +1523,36 @@ A:["おい！ふざけてるのか！？一週間以上も姿を消して！そ�
 solo:{
 N:["プレイヤーを検知しました。ようこそ。","接続が確立されました。あなたの進捗が待っています。","こんにちは、プレイヤー。デイリーミッションを確認しますか？","新しい一日が始まります。新たな成長の機会が利用可能です。","プレイヤーを検知しました。あなたの可能性は未開拓のままです。","接続に成功しました。忘れずに：成長には継続が必要です。","ようこそ。現在、複数の目標が利用可能です。","プレイヤー、次の成長段階があなたを待っています。","分析が完了しました。進捗を続ける時間です。","あなたの存在が記録されました。目標の達成に備えてください。"],
 A:[["プレイヤーを検知しました。最終活動：7日以上前。あなたの進捗は停止されました。規律が著しく低下しています。新たなリハビリクエストが生成されました。","警告 — 長期間の非活動"],"プレイヤーを検知しました。異常な非活動期間が確認されました。あなたの可能性は消えていません。ただ未開拓のままです。進捗を再開してください。",["久しぶりですね、プレイヤー。あなたの目標は保留されたままです。放棄による追加のペナルティはありません。ただし、あなたの成長は行動のみにかかっています。","システム通知"],"長期の非活動を経て、プレイヤーが復帰しました。新たな機会が与えられます。難易度は変わっていません。あなたの覚悟は、まだ証明されていません。"]}}};
+/* ---- AFFICHAGE VISUAL NOVEL : personnage centré, grand et dialogue adaptable ---- */
+const CP_APPEAR='ovtbCpAppearance';
+const cpAp=()=>{try{return Object.assign({mode:'theme',bg:'#101522',opacity:.88,shape:'square',textColor:'#ffffff',nameColor:'#f4d58d',textFont:'system',nameFont:'system'},JSON.parse(localStorage.getItem(CP_APPEAR)||'{}')||{})}catch(e){return{mode:'theme',bg:'#101522',opacity:.88,shape:'square',textColor:'#ffffff',nameColor:'#f4d58d',textFont:'system',nameFont:'system'}}};
+window.cpGetAppearance=cpAp;window.cpAppearanceKey=CP_APPEAR;
+const cpFonts={system:'system-ui, sans-serif',serif:'Georgia, "Times New Roman", serif',sans:'Arial, Helvetica, sans-serif',mono:'ui-monospace, SFMono-Regular, monospace',book:'"Palatino Linotype", Palatino, serif',rounded:'Trebuchet MS, Arial, sans-serif'};
+function cpCrop(src,theme){return new Promise(resolve=>{if(!src)return resolve('');const im=new Image();im.onload=()=>{try{const w=theme==='solo'?Math.min(190,im.naturalWidth):Math.min(theme==='persona'?245:230,im.naturalWidth),h=im.naturalHeight,cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(im,0,0,w,h,0,0,w,h);resolve(cv.toDataURL('image/webp',.9))}catch(e){resolve(src)}};im.onerror=()=>resolve(src);im.src=src})}
+window.cpRenderVN=async function(o){
+ const cl=!!(o.calm||(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches),ap=cpAp(),th=o.theme||document.body.dataset.theme||'solo';
+ const ov=document.createElement('div');ov.className='cp cp-vn cp-vn-'+th+(cl?' cp-calm':'');
+ const scene=document.createElement('div');scene.className='cp-vn-scene';
+ const portrait=document.createElement('img');portrait.className='cp-vn-person';portrait.alt='';
+ const bubble=document.createElement('div');bubble.className='cp-vn-dialog '+(ap.mode==='custom'?'is-custom':'is-theme')+' shape-'+(ap.shape||'square');
+ if(ap.mode==='theme'&&o.frame){bubble.style.backgroundImage='url("'+o.frame+'")'}
+ else if(ap.mode==='custom'){bubble.style.backgroundColor=ap.bg||'#101522';bubble.style.backgroundColor=(ap.bg||'#101522')+Math.round(Math.max(.1,Math.min(1,+ap.opacity||.88))*255).toString(16).padStart(2,'0')}
+ const speaker=document.createElement('div');speaker.className='cp-vn-name';speaker.textContent=o.name||'';
+ const sub=document.createElement('div');sub.className='cp-vn-sub';sub.textContent=o.header||'';
+ const text=document.createElement('div');text.className='cp-vn-text';text.textContent=o.text||'';
+ const fonts=cpFonts; speaker.style.fontFamily=fonts[ap.nameFont]||fonts.system;text.style.fontFamily=fonts[ap.textFont]||fonts.system;
+ speaker.style.color=ap.nameColor||'#f4d58d';text.style.color=ap.textColor||'#fff';
+ if(ap.mode==='custom'){speaker.style.color=ap.nameColor||'#f4d58d';text.style.color=ap.textColor||'#fff'}
+ bubble.append(speaker,sub,text);scene.appendChild(portrait);ov.append(scene,bubble);
+ let icon=null;if(o.portrait){portrait.src=o.portrait}else{icon=document.createElement('div');icon.className='cp-vn-icon';icon.textContent=o.icon||'✦';scene.appendChild(icon)}
+ if(o.theme==='solo')scene.classList.add('is-system');
+ let ready=0,iv=0;const close=()=>{if(Date.now()-ready<450)return;clearInterval(iv);removeEventListener('keydown',keyClose);ov.classList.add('out');setTimeout(()=>ov.remove(),cl?0:260)};const keyClose=e=>{if(e.key==='Escape'||e.key==='Enter'||e.key===' ')close()};
+ ov.addEventListener('click',close);addEventListener('keydown',keyClose);document.body.appendChild(ov);
+ const txt=String(o.text||'');
+ const start=()=>{ready=Date.now();if(cl){text.textContent=txt;return}const a=document.createTextNode(''),b=document.createElement('span');b.style.visibility='hidden';b.textContent=txt;text.textContent='';text.append(a,b);let k=0;iv=setInterval(()=>{k++;a.data=txt.slice(0,k);b.textContent=txt.slice(k);if(k>=txt.length)clearInterval(iv)},o.speed||22)};
+ if(o.portrait)start();else if(o.frame){cpCrop(o.frame,th).then(src=>{if(src){portrait.src=src;icon&&icon.remove()}start()})}else start();
+};
+window.cpPreviewVN=()=>{const th=document.body.dataset.theme||'solo',c=CP[th],frame=c&&IM[c.k]&&IM[c.k][0];window.cpRenderVN({theme:th,frame,name:({bloodborne:'La Poupée',persona:'Morgana',solo:'Le Système'})[th]||'Compagnon',icon:'⚙️',text:'Bonjour, Joueur. Voici un aperçu de la nouvelle présentation en visual novel.'})};
 /* ---- DÉCLENCHEMENT : dernière connexion lue AVANT d'être mise à jour ---- */
 const ls=(k,v)=>{try{return v===undefined?localStorage.getItem(k):localStorage.setItem(k,v)}catch(e){return null}};
 const now=Date.now(),last=+ls('ovtbLastSeen')||0,cat=last&&(now-last)/864e5>7?'A':'N';
@@ -1503,28 +1563,15 @@ function show(){
  if(shown)return;shown=true;
  if(typeof S!=='undefined'&&S.cpOff)return;
  const th=document.body.dataset.theme,c=CP[th],custom=!!(window.cpCustomHasActive&&window.cpCustomHasActive()),builtin=window.cpBuiltinEnabled?window.cpBuiltinEnabled(th):true;
- if(custom&&(!c||!builtin||Math.random()<.5)){window.cpCustomShow&&window.cpCustomShow(cat,th);return}
- if(!c||!builtin){if(!c)window.cpCustomShow&&window.cpCustomShow(cat,th);return}
+ if(custom&&(!c||!builtin||Math.random()<.5)){window.cpCustomShow&&window.cpCustomShow(cat);return}
+ if(!c||!builtin){if(!c)window.cpCustomShow&&window.cpCustomShow(cat);return}
  let h={};try{h=JSON.parse(ls('ovtbCpLast')||'{}')||{}}catch(e){}
  const L=c[cat],key=th+cat;let i;do{i=Math.random()*L.length|0}while(L.length>1&&i===h[key]);
  h[key]=i;ls('ovtbCpLast',JSON.stringify(h));
  const nm=((typeof S!=='undefined'&&S.profile&&S.profile.name)||'').trim().split(/\s+/)[0]||({fr:'Chasseur',ja:'狩人'}[(typeof S!=='undefined'&&S.lang)||'fr']||'Hunter');
- const [e,raw0,head0]=L[i],lg=(typeof S!=='undefined'&&S.lang)||'fr',tr=lg==='fr'?null:(TR[lg]||TR.en),tv=tr&&tr[th]&&tr[th][cat]&&tr[th][cat][i],[raw,head]=Array.isArray(tv)?tv:[tv||raw0,tv?undefined:head0],txt=raw.replace('{n}',nm),
- calm=(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
- const o=document.createElement('div');o.className='cp cp-'+c.k+(calm?' cp-calm':'');
- o.innerHTML='<div class="cpb"><img alt=""><div class="cpz"><div class="cph"></div><div class="cpt"></div></div></div>';
- const img=o.querySelector('img'),z=o.querySelector('.cpz'),hd=o.querySelector('.cph'),t=o.querySelector('.cpt');
- img.src=IM[c.k][c.x[e]||0];hd.textContent=head||'';hd.style.display=head?'':'none';t.textContent=txt;
- let iv,ready=0;
- const close=()=>{if(Date.now()-ready<350)return;clearInterval(iv);removeEventListener('keydown',close);o.classList.add('out');setTimeout(()=>o.remove(),calm?0:300)};
- o.addEventListener('click',close);addEventListener('keydown',close);
- document.body.appendChild(o);
- const go=()=>{let s=Math.min(24,z.clientHeight/2.1);z.style.fontSize=s+'px';
-  while(s>7.5&&z.scrollHeight>z.clientHeight+1){s-=.5;z.style.fontSize=s+'px'}
-  ready=Date.now();if(calm)return;
-  const a=document.createTextNode(''),b=document.createElement('span');b.style.visibility='hidden';b.textContent=txt;t.textContent='';t.append(a,b);
-  let k=0;iv=setInterval(()=>{k++;a.data=txt.slice(0,k);b.textContent=txt.slice(k);if(k>=txt.length)clearInterval(iv)},c.ms)};
- (img.decode?img.decode():Promise.resolve()).catch(()=>{}).then(()=>requestAnimationFrame(go));
+ const [e,raw0,head0]=L[i],lg=(typeof S!=='undefined'&&S.lang)||'fr',tr=lg==='fr'?null:(TR[lg]||TR.en),tv=tr&&tr[th]&&tr[th][cat]&&tr[th][cat][i],[raw,head]=Array.isArray(tv)?tv:[tv||raw0,tv?undefined:head0];
+ const frame=IM[c.k][c.x[e]||0],name=({bloodborne:'La Poupée',persona:'Morgana',solo:'Le Système'})[th]||'Compagnon';
+ window.cpRenderVN({theme:th,frame,name,header:head||'',text:raw.replace('{n}',nm),icon:th==='persona'?'🐈':'✦',speed:c.ms,calm:(typeof S!=='undefined'&&S.anim===false)});
 }
 try{if(typeof DICT!=='undefined')[["Compagnons","Companions","コンパニオン","Compagni","Compañeros","Companheiros"],["Messages d’accueil des compagnons","Companion welcome messages","コンパニオンの歓迎メッセージ","Messaggi di benvenuto dei compagni","Mensajes de bienvenida de los compañeros","Mensagens de boas-vindas dos companheiros"],["La Poupée, Morgana et Le Système t’accueillent à chaque connexion.","The Doll, Morgana and the System greet you at every login.","人形、モルガナ、システムがログインのたびに迎えてくれます。","La Bambola, Morgana e il Sistema ti accolgono a ogni accesso.","La Muñeca, Morgana y el Sistema te dan la bienvenida en cada conexión.","A Boneca, Morgana e o Sistema recebem você a cada acesso."]].forEach(r=>DICT[r[0]]={en:r[1],ja:r[2],it:r[3],es:r[4],pt:r[5]})}catch(e){}
 const start=()=>setTimeout(show,600);
@@ -1634,6 +1681,7 @@ ${sec('8 · Partage','Exporte ce thème dans un fichier. Pour importer un thème
  '<div class="chips"><button class="chip" data-a="exp">Exporter ce thème</button></div>')}
 ${sec('Réinitialisation','Supprime ce thème : il redevient vide (« Vide » sur sa vignette), sans retour possible.',
  '<button class="chip" data-a="reset">Réinitialiser ce thème</button>')}`}
+function cpSavePref(t){const a=cpAp(),k=t.dataset.pref;if(!k)return;a[k]=k==='opacity'?Math.max(.1,Math.min(1,(+t.value)/100)):t.value;try{localStorage.setItem(APKEY,JSON.stringify(a))}catch(e){}const lab=M&&M.querySelector('[data-opacity-label]');if(lab&&k==='opacity')lab.textContent=Math.round(a.opacity*100)+' %'}
 function mount(){M=document.createElement('div');M.className='modal';M.id='cuM';M.innerHTML='<div class="sheet"></div>';document.body.appendChild(M);
 M.addEventListener('click',e=>{if(e.target===M){M.classList.remove('open');return}const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,k=b.dataset.k;
  if(a==='x')M.classList.remove('open');
@@ -1879,19 +1927,14 @@ const uid=()=>'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const mkC=n=>({id:uid(),name:n||'Compagnon',on:true,lm:'app',fl:'fr',img:[],msgs:{}});
 const bk=(c,l)=>(c.msgs[l]=c.msgs[l]||{N:[],A:[]});
 const cnt=(c,l)=>{const b=c.msgs[l];return b?b.N.length+b.A.length:0};
+const APKEY='ovtbCpAppearance',cpAp=()=>window.cpGetAppearance?window.cpGetAppearance():({mode:'theme',bg:'#101522',opacity:.88,shape:'square',textColor:'#ffffff',nameColor:'#f4d58d',textFont:'system',nameFont:'system'});
 const clean=c=>{c=c||{};const o=mkC(String(c.name||'Compagnon').slice(0,24));o.on=c.on!==false;o.lm=['app','study','fixed'].includes(c.lm)?c.lm:'app';o.fl=LG.some(x=>x[0]===c.fl)?c.fl:'fr';
  o.img=(c.img||[]).slice(0,4).map(x=>IMG.test(x)?x:'');
  LG.forEach(([l])=>{const m=c.msgs&&c.msgs[l];if(!m)return;const b=bk(o,l);['N','A'].forEach(k=>(m[k]||[]).slice(0,MAXM).forEach(x=>{const t=String(x&&x.t||'').trim().slice(0,400);if(t)b[k].push({t,e:Math.min(3,Math.max(0,+x.e||0)),h:String(x.h||'').slice(0,60)})}))});return o};
 const lgOf=c=>{const l=c.lm==='fixed'?c.fl:c.lm==='study'?(S.bi&&S.bi.lang):S.lang;return LG.some(x=>x[0]===l)?l:c.fl};
 const calm=()=>S.anim===false||matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* ---- bulle générique (couleurs du thème actif) ---- */
-function bubble(c,m){const o=document.createElement('div'),cl=calm();o.className='cp cp-gen'+(cl?' cp-calm':'');
- const src=c.img[m.e]||c.img.find(x=>x)||'',nm=((S.profile&&S.profile.name)||'').trim().split(/\s+/)[0]||'';
- o.innerHTML='<div class="cpb cpg card"><div class="cpgp">'+(src?'<img alt="" src="'+src+'">':'<b>'+esc(c.name.slice(0,1).toUpperCase())+'</b>')+'</div><div class="cpgt"><div class="cpgn">'+esc(c.name)+'</div>'+(m.h?'<div class="cph">'+esc(m.h)+'</div>':'')+'<div class="cpgx"></div></div></div>';
- const t=o.querySelector('.cpgx'),txt=m.t.replace(/\{n\}/g,nm).replace(/[,\s]+$/,''),t0=Date.now();let iv=0;
- if(cl)t.textContent=txt;else{const a=document.createTextNode(''),b=document.createElement('span');b.style.visibility='hidden';b.textContent=txt;t.append(a,b);let k=0;iv=setInterval(()=>{k++;a.data=txt.slice(0,k);b.textContent=txt.slice(k);if(k>=txt.length)clearInterval(iv)},22)}
- const close=()=>{if(Date.now()-t0<350)return;clearInterval(iv);removeEventListener('keydown',close);o.classList.add('out');setTimeout(()=>o.remove(),cl?0:300)};
- o.addEventListener('click',close);addEventListener('keydown',close);document.body.appendChild(o)}
+function bubble(c,m){const nm=((S.profile&&S.profile.name)||'').trim().split(/\s+/)[0]||'';const txt=m.t.replace(/\{n\}/g,nm).replace(/[ ,\s]+$/,'');window.cpRenderVN({theme:document.body.dataset.theme||'solo',portrait:c.img[m.e]||c.img.find(x=>x)||'',name:c.name,header:m.h||'',text:txt,icon:c.name.slice(0,1).toUpperCase(),speed:22,calm:calm()})}
 /* ---- tirage : un compagnon actif parmi ceux qui ont des messages dans leur langue, puis un message sans répétition ---- */
 window.cpCustomHasActive=()=>{C=ld();return C.some(c=>{if(!c.on)return false;const l=lgOf(c),b=c.msgs[l];return !!(b&&(b.N.length||b.A.length))})};
 window.cpCustomShow=cat=>{C=ld();const el=[];C.forEach(c=>{if(!c.on)return;const l=lgOf(c),b=c.msgs[l];if(!b)return;const a=cat==='A'&&b.A.length?b.A:b.N;if(a.length)el.push([c,a,l+(a===b.A?'A':'N')])});
@@ -1925,6 +1968,7 @@ function list(){const th=document.body.dataset.theme,bi=BUILTIN[th],bon=window.c
 <p class="small">Active ou désactive chaque compagnon. Si plusieurs sont actifs, l’un d’eux est choisi au hasard à la connexion. Les compagnons sans dialogue dans la langue active ne peuvent pas apparaître.</p>
 ${bi?sec('Compagnon du thème actif',`${bi.name} · ${({bloodborne:'Bloodborne',persona:'Persona 5',solo:'Solo Leveling'})[th]}`,`<label class="cuC"><input type="checkbox" data-a="baseon" data-k="${th}" ${bon?'checked':''}><span><b>${esc(bi.icon+' '+bi.name)}</b><small>${bon?'Actif pour ce thème':'Désactivé pour ce thème'}</small></span></label>`):sec('Compagnon du thème actif','Ce thème ne possède pas de compagnon intégré.','<p class="small">Tu peux utiliser tes compagnons personnalisés ci-dessous.</p>')}
 ${sec('Mes compagnons personnalisés',C.length?'Tu peux les activer en complément du compagnon du thème.':'Aucun compagnon personnalisé.',C.map(c=>`<div class="cuS"><b>${esc(c.name)}</b><p class="small">${esc(sum(c))}</p><label class="cuC"><input type="checkbox" data-a="on" data-k="${c.id}" ${c.on?'checked':''}><span><b>${c.on?'Actif':'Désactivé'}</b><small>Peut apparaître à la connexion.</small></span></label><div class="chips"><button class="chip" data-a="edit" data-k="${c.id}">Modifier</button><button class="chip" data-a="expc" data-k="${c.id}">Exporter</button><button class="chip" data-a="delc" data-k="${c.id}">Supprimer</button></div></div>`).join(''))}
+${sec('Apparence des dialogues','Choisis le cadre du thème actif ou une bulle carrée transparente personnalisable.',`<div class="field"><label>Style de la bulle</label><select data-pref="mode"><option value="theme" ${cpAp().mode==='theme'?'selected':''}>Design du thème actuel</option><option value="custom" ${cpAp().mode==='custom'?'selected':''}>Bulle personnalisée</option></select></div><div class="cpPrefGrid"><div class="field"><label>Couleur de la bulle</label><input type="color" data-pref="bg" value="${cpAp().bg}"></div><div class="field"><label>Opacité</label><input type="range" min="10" max="100" value="${Math.round(cpAp().opacity*100)}" data-pref="opacity"><small class="small" data-opacity-label>${Math.round(cpAp().opacity*100)} %</small></div><div class="field"><label>Forme</label><select data-pref="shape"><option value="square" ${cpAp().shape==='square'?'selected':''}>Carrée</option><option value="rounded" ${cpAp().shape==='rounded'?'selected':''}>Arrondie</option><option value="speech" ${cpAp().shape==='speech'?'selected':''}>Bulle de dialogue</option></select></div><div class="field"><label>Police du dialogue</label><select data-pref="textFont">${[['system','Système'],['serif','Sérif'],['sans','Sans sérif'],['mono','Monospace'],['book','Livre'],['rounded','Arrondie']].map(([v,n])=>`<option value="${v}" ${cpAp().textFont===v?'selected':''}>${n}</option>`).join('')}</select></div><div class="field"><label>Couleur du texte</label><input type="color" data-pref="textColor" value="${cpAp().textColor}"></div><div class="field"><label>Police du nom</label><select data-pref="nameFont">${[['system','Système'],['serif','Sérif'],['sans','Sans sérif'],['mono','Monospace'],['book','Livre'],['rounded','Arrondie']].map(([v,n])=>`<option value="${v}" ${cpAp().nameFont===v?'selected':''}>${n}</option>`).join('')}</select></div><div class="field"><label>Couleur du nom</label><input type="color" data-pref="nameColor" value="${cpAp().nameColor}"></div></div><button class="chip" data-a="preview">Aperçu du visual novel</button>`) }
 ${sec('Ajouter et partager',C.length?'':'Aucun compagnon pour l’instant.',`<div class="chips"><button class="chip" data-a="new">+ Nouveau compagnon</button><button class="chip" data-a="impc">Importer un compagnon (.json)</button><button class="chip" data-a="impcsv">Importer des dialogues (.csv)</button><button class="chip" data-a="tpl">Modèle CSV</button><button class="chip" data-a="expcsv">Exporter tous les dialogues (.csv)</button></div><input type="file" id="ccF" hidden>`)}`}
 function edit(){const c=C.find(x=>x.id===cur),b=bk(c,lg),arr=b[ct];
  return`<div class="sheethead"><h2>${esc(c.name)}</h2><button class="iconbtn" data-a="back" aria-label="Retour">←</button></div>
@@ -1937,6 +1981,7 @@ const me=()=>C.find(x=>x.id===cur);
 function mount(){M=document.createElement('div');M.className='modal';M.id='ccM';M.innerHTML='<div class="sheet"></div>';document.body.appendChild(M);
  M.addEventListener('click',e=>{if(e.target===M){M.classList.remove('open');return}const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,k=b.dataset.k,i=+b.dataset.i;
   if(a==='x')M.classList.remove('open');
+  else if(a==='preview')window.cpPreviewVN&&window.cpPreviewVN();
   else if(a==='back'){cur=null;render()}
   else if(a==='new'){if(C.length>=MAXC){alert('Maximum '+MAXC+' compagnons.');return}const c=mkC();C.push(c);sv();cur=c.id;lg=lgOf(c);render()}
   else if(a==='edit'){cur=k;lg=lgOf(C.find(x=>x.id===k));ct='N';render()}
@@ -1953,9 +1998,9 @@ function mount(){M=document.createElement('div');M.className='modal';M.id='ccM';
   else if(a==='delm'){bk(me(),lg)[ct].splice(i,1);sv();render()}
   else if(a==='addm'){bk(me(),lg)[ct].push({t:'',e:0,h:''});sv();render()}
   else if(a==='bulk'){const ta=M.querySelector('[data-f=bulk]'),arr=bk(me(),lg)[ct];ta.value.split('\n').map(x=>x.trim().slice(0,400)).filter(Boolean).forEach(t=>{if(arr.length<MAXM)arr.push({t,e:0,h:''})});sv();render()}});
- M.addEventListener('input',e=>{const t=e.target,f=t.dataset.f,i=+t.dataset.i;if(!f||t.type==='file')return;
+ M.addEventListener('input',e=>{const t=e.target;if(t.dataset.pref){cpSavePref(t);return}const f=t.dataset.f,i=+t.dataset.i;if(!f||t.type==='file')return;
   if(f==='name'){me().name=t.value.slice(0,24)||'Compagnon';dsv()}else if(f==='mt'){bk(me(),lg)[ct][i].t=t.value;dsv()}});
- M.addEventListener('change',async e=>{const t=e.target,f=t.dataset.f,i=+t.dataset.i;
+ M.addEventListener('change',async e=>{const t=e.target;if(t.dataset.pref){cpSavePref(t);return}const f=t.dataset.f,i=+t.dataset.i;
   if(t.id==='ccF'&&t.files[0]){const fl=t.files[0];try{if(fl.size>3e6)throw 0;const x=await fl.text();
     if(t.dataset.m==='impcsv')importCsv(x);else{if(C.length>=MAXC){alert('Maximum '+MAXC+' compagnons.');return}const c=clean(JSON.parse(x));c.id=uid();C.push(c);if(sv())render()}}catch(err){alert('Fichier non valide.')}t.value='';return}
   if(f==='lm'){me().lm=t.value;sv();render()}else if(f==='fl'){me().fl=t.value;sv()}else if(f==='lg'){lg=t.value;render()}else if(f==='me'){bk(me(),lg)[ct][i].e=+t.value;sv()}
