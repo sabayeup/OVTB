@@ -6,7 +6,7 @@
      (sous le rouage des paramètres). Change uniquement le texte entre
      guillemets, par exemple 'ver.2.3'. Rien d'autre à toucher.
      ===================================================================== -->
-<script>window.APP_VERSION = 'ver.4.0';</script>
+<script>window.APP_VERSION = 'ver.4.0.1';</script>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -574,7 +574,7 @@ body[data-theme="fairytail"] .thtile{background:#f1deb0;border-color:#8a5a2b;col
 .cp-vn-anim-persona .cp-vn-person{animation:cpPersonaPortrait .5s cubic-bezier(.16,1,.3,1) both}
 .cp-vn-anim-glitch .cp-vn-dialog{animation:cpGlitchEnter .42s steps(1,end) both}
 .cp-vn-anim-glitch .cp-vn-person{animation:cpPersonaPortrait .42s ease-out both}
-.cp-vn-anim-fade .cp-vn-stage{animation:cpSimpleFade .32s ease both}
+.cp-vn-anim-fade .cp-vn-dialog{animation:cpSimpleFade .32s ease both}
 .cp-vn-anim-none .cp-vn-stage{animation:none!important}
 .cp-vn.out .cp-vn-stage{animation:cpSimpleFade .18s ease reverse both}
 @keyframes cpPersonaEnter{0%{opacity:0;transform:translate(65px,10px) skewX(-8deg) scale(.94);clip-path:inset(0 0 0 100%)}65%{opacity:1;transform:translate(-5px,0) skewX(2deg) scale(1.015);clip-path:inset(0)}100%{transform:none;clip-path:inset(0)}}
@@ -1592,7 +1592,7 @@ window.cpRenderVN=async function(o){
  const cl=anim==='none'||o.calm||(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
  const ov=document.createElement('div');ov.className='cp cp-vn cp-vn-'+th+((String(o.name||'').trim().toLowerCase()==='rem')?' cp-vn-rem':'')+' cp-anim-'+(cl?'none':anim);
  const stage=document.createElement('div');stage.className='cp-vn-stage';
- const portrait=document.createElement('img');portrait.className='cp-vn-person';portrait.alt='';
+ const portrait=document.createElement('img');portrait.className='cp-vn-person';portrait.alt='';if(o.portraitPosition){const pp=o.portraitPosition;portrait.style.transform=`translate(${+pp.x||0}%,${+pp.y||0}%) scale(${Math.max(.5,Math.min(2,+pp.scale||1))})`;portrait.style.transformOrigin='bottom center';}
  const bubble=document.createElement('div');bubble.className='cp-vn-dialog '+(ap.mode==='custom'?'is-custom':'is-theme')+' shape-'+(ap.shape||'square');
  if(ap.mode==='custom'){const hex=ap.bg||'#101522',alpha=Math.round(Math.max(.1,Math.min(1,+ap.opacity||.88))*255).toString(16).padStart(2,'0');bubble.style.backgroundColor=hex+alpha}
  const speaker=document.createElement('div');speaker.className='cp-vn-name'+(ap.namePosition==='outside'?' is-outside':'');speaker.textContent=o.name||'';
@@ -1606,11 +1606,25 @@ window.cpRenderVN=async function(o){
  let icon=null;if(o.portrait){portrait.src=o.portrait}else{icon=document.createElement('div');icon.className='cp-vn-icon';icon.textContent=o.icon||'✦';stage.insertBefore(icon,bubble)}
  let ready=0,iv=0;const close=()=>{if(Date.now()-ready<450)return;clearInterval(iv);removeEventListener('keydown',keyClose);ov.classList.add('out');setTimeout(()=>ov.remove(),anim==='none'?0:260)};const keyClose=e=>{if(e.key==='Escape'||e.key==='Enter'||e.key===' ')close()};
  ov.addEventListener('click',close);addEventListener('keydown',keyClose);document.body.appendChild(ov);
+ // L'aperçu rejoue la transition choisie, mais uniquement sur la bulle : jamais sur la scène entière.
+ if(o.previewTransition){
+  let tc={type:'none'};try{tc=window.trCfg?window.trCfg():tc}catch(e){}
+  if(!(typeof S!=='undefined'&&S.anim===false)&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+   const dur=tc.type==='glitch'?420:tc.type==='sweep'?520:tc.type==='fade'?320:0;
+   if(tc.type==='fade')bubble.animate([{opacity:0},{opacity:1}],{duration:dur,easing:'ease-in-out',fill:'both'});
+   else if(tc.type==='sweep'){
+    const frames=(tc.shape||'diag')==='circle'?[{clipPath:'circle(0% at 50% 50%)',opacity:1},{clipPath:'circle(150% at 50% 50%)',opacity:1}]:[{clipPath:(tc.shape||'diag')==='bar'?'inset(0 100% 0 0)':'inset(0 100% 0 0 round 18px)',opacity:1},{clipPath:'inset(0 0 0 0)',opacity:1}];
+    bubble.animate(frames,{duration:dur,easing:'cubic-bezier(.7,0,.3,1)',fill:'both'});
+   }else if(tc.type==='glitch'){
+    bubble.animate([{opacity:0,transform:'translateX(-10px) skewX(-2deg)',filter:'saturate(2)'},{opacity:1,transform:'translateX(7px) skewX(1deg)',filter:'saturate(2.4)'},{opacity:1,transform:'translateX(-3px)',filter:'saturate(1.5)'},{opacity:1,transform:'none',filter:'none'}],{duration:dur,easing:'steps(1,end)',fill:'both'});
+   }
+  }
+ }
  const txt=String(o.text||'');
  const start=()=>{ready=Date.now();if(cl){text.textContent=txt;return}if(anim==='fade'){text.textContent=txt;return}const a=document.createTextNode(''),b=document.createElement('span');b.style.visibility='hidden';b.textContent=txt;text.textContent='';text.append(a,b);let k=0;iv=setInterval(()=>{k++;a.data=txt.slice(0,k);b.textContent=txt.slice(k);if(k>=txt.length)clearInterval(iv)},o.speed||22)};
  if(o.portrait)start();else if(o.frame){cpCrop(o.frame,th).then(src=>{if(src){portrait.src=src;icon&&icon.remove()}start()})}else start();
 };
-window.cpPreviewBuiltin=()=>{const th=document.body.dataset.theme||'solo',c=CP[th],frame=c&&IM[c.k]&&IM[c.k][0],line=c&&c.N&&c.N[0];window.cpRenderVN({theme:th,frame,name:({bloodborne:'La Poupée',persona:'Morgana',solo:'Le Système'})[th]||'Compagnon',icon:th==='persona'?'🐈':'✦',text:line&&line[1]||'Bonjour, Joueur. Voici un aperçu des dialogues.'})};
+window.cpPreviewBuiltin=()=>{const th=document.body.dataset.theme||'solo',c=CP[th],frame=c&&IM[c.k]&&IM[c.k][0],line=c&&c.N&&c.N[0];window.cpRenderVN({theme:th,frame,name:({bloodborne:'La Poupée',persona:'Morgana',solo:'Le Système'})[th]||'Compagnon',icon:th==='persona'?'🐈':'✦',text:line&&line[1]||'Bonjour, Joueur. Voici un aperçu des dialogues.',previewTransition:true})};
 window.cpPreviewVN=()=>window.cpPreviewBuiltin&&window.cpPreviewBuiltin();
 /* ---- DÉCLENCHEMENT : dernière connexion lue AVANT d'être mise à jour ---- */
 const ls=(k,v)=>{try{return v===undefined?localStorage.getItem(k):localStorage.setItem(k,v)}catch(e){return null}};
@@ -1971,7 +1985,7 @@ paintTheme(st);
 <script id="ccJs">
 /* PHASE 3 : compagnons personnalisés (dialogues par langue, tirage aléatoire, import/export JSON et CSV) */
 (()=>{try{
-const KEY='ovtbCompanions',LG=[['fr','Français'],['en','English'],['ja','日本語'],['it','Italiano'],['es','Español'],['pt','Português']],EX=['Normale','Joyeuse','Surprise','Soucieuse'],MAXC=8,MAXM=300;
+const KEY='ovtbCompanions',LG=[['fr','Français'],['en','English'],['ja','日本語'],['it','Italiano'],['es','Español'],['pt','Português']],EX=['Expression 1','Expression 2','Expression 3','Expression 4'],MAXC=8,MAXM=300;
 const BUILTIN={bloodborne:{name:'La Poupée',icon:'🪆'},persona:{name:'Morgana',icon:'🐈'},solo:{name:'Le Système',icon:'⚙️'}},BKEY='ovtbThemeCompanionFlags';
 const bflags=()=>{try{return JSON.parse(localStorage.getItem(BKEY)||'{}')||{}}catch(e){return{}}};
 window.cpBuiltinEnabled=th=>{const f=bflags();return f[th]!==false};
@@ -1984,17 +1998,17 @@ let C=ld(),tm=0;
 const sv=()=>{try{localStorage.setItem(KEY,JSON.stringify(C));return true}catch(e){alert('Espace de stockage insuffisant : utilise des portraits plus petits.');C=ld();return false}};
 const dsv=()=>{clearTimeout(tm);tm=setTimeout(sv,400)};
 const uid=()=>'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const mkC=n=>({id:uid(),name:n||'Compagnon',on:true,lm:'app',fl:'fr',img:[],msgs:{}});
+const mkC=n=>({id:uid(),name:n||'Compagnon',on:true,lm:'app',fl:'fr',img:[],exprNames:[...EX],imgPos:Array.from({length:4},()=>({x:0,y:0,scale:1})),msgs:{}});
 const bk=(c,l)=>(c.msgs[l]=c.msgs[l]||{N:[],A:[]});
 const cnt=(c,l)=>{const b=c.msgs[l];return b?b.N.length+b.A.length:0};
 const APKEY='ovtbCpAppearance',cpAp=()=>window.cpGetAppearance?window.cpGetAppearance():({mode:'theme',bg:'#101522',opacity:.88,shape:'square',textColor:'#ffffff',nameColor:'#f4d58d',textFont:'system',nameFont:'system'});
 const clean=c=>{c=c||{};const o=mkC(String(c.name||'Compagnon').slice(0,24));o.on=c.on!==false;o.lm=['app','study','fixed'].includes(c.lm)?c.lm:'app';o.fl=LG.some(x=>x[0]===c.fl)?c.fl:'fr';
- o.img=(c.img||[]).slice(0,4).map(x=>IMG.test(x)?x:'');
+ o.img=(c.img||[]).slice(0,4).map(x=>IMG.test(x)?x:'');o.exprNames=Array.from({length:4},(_,i)=>String(c.exprNames&&c.exprNames[i]||EX[i]).slice(0,24));o.imgPos=Array.from({length:4},(_,i)=>{const p=c.imgPos&&c.imgPos[i]||{};return{x:Math.max(-100,Math.min(100,+p.x||0)),y:Math.max(-100,Math.min(100,+p.y||0)),scale:Math.max(.5,Math.min(2,+p.scale||1))}});
  LG.forEach(([l])=>{const m=c.msgs&&c.msgs[l];if(!m)return;const b=bk(o,l);['N','A'].forEach(k=>(m[k]||[]).slice(0,MAXM).forEach(x=>{const t=String(x&&x.t||'').trim().slice(0,400);if(t)b[k].push({t,e:Math.min(3,Math.max(0,+x.e||0)),h:String(x.h||'').slice(0,60)})}))});return o};
 const lgOf=c=>{const l=c.lm==='fixed'?c.fl:c.lm==='study'?(S.bi&&S.bi.lang):S.lang;return LG.some(x=>x[0]===l)?l:c.fl};
 const calm=()=>S.anim===false||matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* ---- bulle générique (couleurs du thème actif) ---- */
-function bubble(c,m){const nm=((S.profile&&S.profile.name)||'').trim().split(/\s+/)[0]||'';const txt=m.t.replace(/\{n\}/g,nm).replace(/[ ,\s]+$/,'');window.cpRenderVN({theme:document.body.dataset.theme||'solo',portrait:c.img[m.e]||c.img.find(x=>x)||'',name:c.name,header:m.h||'',text:txt,icon:c.name.slice(0,1).toUpperCase(),speed:22,calm:calm()})}
+function bubble(c,m){const nm=((S.profile&&S.profile.name)||'').trim().split(/\s+/)[0]||'';const txt=m.t.replace(/\{n\}/g,nm).replace(/[ ,\s]+$/,'');window.cpRenderVN({theme:document.body.dataset.theme||'solo',portrait:c.img[m.e]||c.img.find(x=>x)||'',portraitPosition:c.imgPos&&c.imgPos[m.e],name:c.name,header:m.h||'',text:txt,icon:c.name.slice(0,1).toUpperCase(),speed:22,calm:calm()})}
 /* ---- tirage : un compagnon actif parmi ceux qui ont des messages dans leur langue, puis un message sans répétition ---- */
 window.cpCustomHasActive=()=>{C=ld();return C.some(c=>{if(!c.on)return false;const l=lgOf(c),b=c.msgs[l];return !!(b&&(b.N.length||b.A.length))})};
 window.cpCustomShow=cat=>{C=ld();const el=[];C.forEach(c=>{if(!c.on)return;const l=lgOf(c),b=c.msgs[l];if(!b)return;const a=cat==='A'&&b.A.length?b.A:b.N;if(a.length)el.push([c,a,l+(a===b.A?'A':'N')])});
@@ -2033,9 +2047,9 @@ ${sec('Ajouter et partager',C.length?'':'Aucun compagnon pour l’instant.',`<di
 function edit(){const c=C.find(x=>x.id===cur),b=bk(c,lg),arr=b[ct];
  return`<div class="sheethead"><h2>${esc(c.name)}</h2><button class="iconbtn" data-a="back" aria-label="Retour">←</button></div>
 ${sec('Nom','',`<div class="field"><input data-f="name" maxlength="24" value="${esc(c.name)}"></div>`)}
-${sec('Portraits','Jusqu’à 4 expressions. Une expression sans image utilise la première.',EX.map((n,i)=>`<div class="row between"><span>${i+1} · ${n}</span><span>${c.img[i]?`<img src="${c.img[i]}" alt="" style="width:40px;height:40px;object-fit:cover;border-radius:8px;vertical-align:middle"> <button class="chip" data-a="rmi" data-i="${i}">Retirer</button> `:''}<input type="file" accept="image/*" data-f="img" data-i="${i}"></span></div>`).join(''))}
+${sec('Portraits et expressions','Personnalise le nom et le cadrage de chacune des 4 expressions. X/Y déplacent le portrait, Échelle ajuste sa taille.',Array.from({length:4},(_,i)=>{const p=(c.imgPos&&c.imgPos[i])||{x:0,y:0,scale:1};return `<div class="card" style="padding:10px;margin:8px 0"><div class="field"><label>Nom de l’expression ${i+1}</label><input data-f="exprname" data-i="${i}" maxlength="24" value="${esc((c.exprNames&&c.exprNames[i])||EX[i])}"></div><div class="row between"><span>${c.img[i]?`<img src="${c.img[i]}" alt="" style="width:52px;height:52px;object-fit:contain;border-radius:8px;vertical-align:middle"> <button class="chip" data-a="rmi" data-i="${i}">Retirer</button> `:'Aucune image'}</span><input type="file" accept="image/*" data-f="img" data-i="${i}"></div><div class="field"><label>Déplacement horizontal : ${p.x}%</label><input type="range" min="-100" max="100" value="${p.x}" data-f="posx" data-i="${i}"></div><div class="field"><label>Déplacement vertical : ${p.y}%</label><input type="range" min="-100" max="100" value="${p.y}" data-f="posy" data-i="${i}"></div><div class="field"><label>Échelle : ${p.scale.toFixed(2)}×</label><input type="range" min="50" max="200" value="${Math.round(p.scale*100)}" data-f="poss" data-i="${i}"></div></div>`}).join(''))}
 ${sec('Langue des dialogues','Langue dans laquelle ce compagnon parle.',`<div class="field"><label>Langue utilisée</label><select data-f="lm">${opt([['app','Langue de l’app'],['study','Langue étudiée'],['fixed','Langue fixe']],c.lm)}</select></div>`+(c.lm==='fixed'?`<div class="field"><label>Langue fixe</label><select data-f="fl">${opt(LG,c.fl)}</select></div>`:''))}
-${sec('Dialogues','Aucune traduction automatique : chaque langue a ses propres messages. {n} = ton pseudo.',`<div class="field"><label>Langue à modifier</label><select data-f="lg">${opt(LG.map(([k,l])=>[k,l+' ('+cnt(c,k)+')']),lg)}</select></div><div class="chips"><button class="chip${ct==='N'?' selected':''}" data-a="ct" data-k="N">Connexion normale (${b.N.length})</button><button class="chip${ct==='A'?' selected':''}" data-a="ct" data-k="A">Retour après 7 jours (${b.A.length})</button></div>`+arr.map((m,i)=>`<div class="field"><div class="row" style="gap:8px;flex-wrap:wrap"><select data-f="me" data-i="${i}">${opt(EX.map((n,j)=>[j,n]),m.e)}</select><button class="chip" data-a="test" data-i="${i}">Tester</button><button class="chip" data-a="delm" data-i="${i}">Supprimer</button></div><textarea data-f="mt" data-i="${i}" rows="2" maxlength="400">${esc(m.t)}</textarea></div>`).join('')+`<button class="chip" data-a="addm">+ Ajouter un message</button><div class="field"><label>Ajout en masse (un message par ligne)</label><textarea data-f="bulk" rows="3"></textarea><button class="chip" data-a="bulk">Ajouter ces lignes</button></div>`)}`}
+${sec('Dialogues','Aucune traduction automatique : chaque langue a ses propres messages. {n} = ton pseudo.',`<div class="field"><label>Langue à modifier</label><select data-f="lg">${opt(LG.map(([k,l])=>[k,l+' ('+cnt(c,k)+')']),lg)}</select></div><div class="chips"><button class="chip${ct==='N'?' selected':''}" data-a="ct" data-k="N">Connexion normale (${b.N.length})</button><button class="chip${ct==='A'?' selected':''}" data-a="ct" data-k="A">Retour après 7 jours (${b.A.length})</button></div>`+arr.map((m,i)=>`<div class="field"><div class="row" style="gap:8px;flex-wrap:wrap"><select data-f="me" data-i="${i}">${opt((me().exprNames||EX).map((n,j)=>[j,n]),m.e)}</select><button class="chip" data-a="test" data-i="${i}">Tester</button><button class="chip" data-a="delm" data-i="${i}">Supprimer</button></div><textarea data-f="mt" data-i="${i}" rows="2" maxlength="400">${esc(m.t)}</textarea></div>`).join('')+`<button class="chip" data-a="addm">+ Ajouter un message</button><div class="field"><label>Ajout en masse (un message par ligne)</label><textarea data-f="bulk" rows="3"></textarea><button class="chip" data-a="bulk">Ajouter ces lignes</button></div>`)}`}
 function render(){M.firstChild.innerHTML=cur?edit():list()}
 const me=()=>C.find(x=>x.id===cur);
 function mount(){M=document.createElement('div');M.className='modal';M.id='ccM';M.innerHTML='<div class="sheet"></div>';document.body.appendChild(M);
@@ -2061,12 +2075,12 @@ function mount(){M=document.createElement('div');M.className='modal';M.id='ccM';
   else if(a==='addm'){bk(me(),lg)[ct].push({t:'',e:0,h:''});sv();render()}
   else if(a==='bulk'){const ta=M.querySelector('[data-f=bulk]'),arr=bk(me(),lg)[ct];ta.value.split('\n').map(x=>x.trim().slice(0,400)).filter(Boolean).forEach(t=>{if(arr.length<MAXM)arr.push({t,e:0,h:''})});sv();render()}});
  M.addEventListener('input',e=>{const t=e.target;if(t.dataset.pref){cpSavePref(t);return}const f=t.dataset.f,i=+t.dataset.i;if(!f||t.type==='file')return;
-  if(f==='name'){me().name=t.value.slice(0,24)||'Compagnon';dsv()}else if(f==='mt'){bk(me(),lg)[ct][i].t=t.value;dsv()}});
+  if(f==='name'){me().name=t.value.slice(0,24)||'Compagnon';dsv()}else if(f==='exprname'){(me().exprNames||(me().exprNames=[...EX]))[i]=t.value.slice(0,24)||EX[i];dsv()}else if(f==='mt'){bk(me(),lg)[ct][i].t=t.value;dsv()}});
  M.addEventListener('change',async e=>{const t=e.target;if(t.dataset.pref){cpSavePref(t);return}const f=t.dataset.f,i=+t.dataset.i;
   if(f==='cardimg'&&t.files&&t.files[0]){try{const c=C.find(x=>x.id===t.dataset.k);if(c){c.img[0]=await toData(t.files[0],320);if(sv())render()}}catch(err){alert('Image non valide.')}t.value='';return}
   if(t.id==='ccF'&&t.files[0]){const fl=t.files[0];try{if(fl.size>3e6)throw 0;const x=await fl.text();
     if(t.dataset.m==='impcsv')importCsv(x);else{if(C.length>=MAXC){alert('Maximum '+MAXC+' compagnons.');return}const c=clean(JSON.parse(x));c.id=uid();C.push(c);if(sv())render()}}catch(err){alert('Fichier non valide.')}t.value='';return}
-  if(f==='lm'){me().lm=t.value;sv();render()}else if(f==='fl'){me().fl=t.value;sv()}else if(f==='lg'){lg=t.value;render()}else if(f==='me'){bk(me(),lg)[ct][i].e=+t.value;sv()}
+  if(f==='posx'||f==='posy'||f==='poss'){const p=me().imgPos||(me().imgPos=Array.from({length:4},()=>({x:0,y:0,scale:1})));const pp=p[i]||(p[i]={x:0,y:0,scale:1});if(f==='posx')pp.x=+t.value;else if(f==='posy')pp.y=+t.value;else pp.scale=+t.value/100;sv();const lab=t.parentElement.querySelector('label');if(lab)lab.textContent=(f==='posx'?'Déplacement horizontal : '+pp.x+'%':f==='posy'?'Déplacement vertical : '+pp.y+'%':'Échelle : '+pp.scale.toFixed(2)+'×')}else if(f==='lm'){me().lm=t.value;sv();render()}else if(f==='fl'){me().fl=t.value;sv()}else if(f==='lg'){lg=t.value;render()}else if(f==='me'){bk(me(),lg)[ct][i].e=+t.value;sv()}
   else if(f==='img'&&t.files[0]){try{me().img[i]=await toData(t.files[0],320);for(let j=0;j<4;j++)me().img[j]=me().img[j]||'';if(sv())render()}catch(err){alert('Image non valide.')}}})}
 window.cpPreviewVN=()=>{
  const th=document.body.dataset.theme||'solo';
@@ -2082,7 +2096,7 @@ window.cpPreviewVN=()=>{
  if(!messages.length){const fallback=LG.find(([l])=>chosen.msgs&&chosen.msgs[l]&&chosen.msgs[l].N&&chosen.msgs[l].N.length);if(fallback){lang=fallback[0];messages=chosen.msgs[lang].N;}}
  const message=messages[0]&&messages[0].t||('Bonjour, Joueur. Voici un aperçu des dialogues de '+chosen.name+'.');
  const portrait=(chosen.img||[]).find(Boolean)||'';
- window.cpRenderVN({theme:th,portrait,name:chosen.name,icon:chosen.name.slice(0,1)||'✦',text:message.replace(/\{n\}/g,'Joueur')});
+ window.cpRenderVN({theme:th,portrait,name:chosen.name,icon:chosen.name.slice(0,1)||'✦',text:message.replace(/\{n\}/g,'Joueur'),previewTransition:true});
 };
 window.ccOpen=()=>{if(!M)mount();C=ld();cur=null;render();M.classList.add('open')};
 const _selectTheme=window.selectTheme;if(_selectTheme)window.selectTheme=function(btn,name){window.cpResetForTheme(name);return _selectTheme(btn,name)};
