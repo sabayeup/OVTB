@@ -1815,14 +1815,22 @@ async function run(c,fw,swap){
 const _go=window.go;let busy=false;
 window.go=function(p){const cur=document.querySelector('.page.active'),from=cur&&cur.id,c=cfg(),a=arguments,me=this;
  const off=(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
- if(busy||off||!from||from===p||c.type==='none')return _go.apply(me,a);
+ if(busy||off||p==='settings'||!from||from===p||c.type==='none')return _go.apply(me,a);
  busy=true;let done=false;const sw=()=>{if(!done){done=true;_go.apply(me,a)}};
  run(c,fwd(from,p),sw).catch(()=>{}).finally(()=>{sw();busy=false;const x=document.querySelector('main');if(x)x.style.transformOrigin=''})};
 const OPEN={openModal:()=>$('modal').classList.contains('open'),fvOpen:()=>$('fv').classList.contains('open'),thPage:()=>{const e=document.getElementById('thP');return e&&e.classList.contains('open')},thOpen:()=>{const e=document.getElementById('thM');return e&&e.classList.contains('open')},cuOpen:()=>{const e=document.getElementById('cuM');return e&&e.classList.contains('open')},ccOpen:()=>{const e=document.getElementById('ccM');return e&&e.classList.contains('open')}};
 const offNow=()=>(typeof S!=='undefined'&&S.anim===false)||matchMedia('(prefers-reduced-motion:reduce)').matches;
 window.trWrap=n=>{const f=window[n];if(typeof f!=='function'||f.__tr)return;const w=function(){const a=arguments,me=this,c=cfg();
- if(busy||window.__trSkip||offNow()||c.type==='none'||(OPEN[n]&&OPEN[n]()))return f.apply(me,a);
+ if(busy||n==='thOpen'||window.__trSkip||offNow()||c.type==='none'||(OPEN[n]&&OPEN[n]()))return f.apply(me,a);
  busy=true;let done=false;const sw=()=>{if(!done){done=true;f.apply(me,a)}};run(c,true,sw).catch(()=>{}).finally(()=>{sw();busy=false})};w.__tr=1;window[n]=w};
+/* Les actions de l'en-tête ouvrent leurs panneaux sans transition. */
+['ntOpen','acOpen'].forEach(n=>{
+ const f=window[n];
+ if(typeof f==='function'&&!f.__headerNoTransition){
+  const w=function(){window.__trSkip=true;try{return f.apply(this,arguments)}finally{window.__trSkip=false}};
+  w.__headerNoTransition=true;window[n]=w;
+ }
+});
 Object.keys(OPEN).forEach(window.trWrap);
 }catch(e){console.warn('transitions',e)}})();
 </script>
